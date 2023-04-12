@@ -6,6 +6,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true, // 允许导入json
     "target": "es2017",
     "sourceMap": true,
     "outDir": "./dist",
