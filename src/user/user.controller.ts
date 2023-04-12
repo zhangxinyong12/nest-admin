@@ -6,11 +6,12 @@ import {
   Patch,
   Param,
   Delete,
+  HttpStatus,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 // @ApiTags('用户')
 @Controller('user')
@@ -22,6 +23,10 @@ export class UserController {
     summary: '新增用户',
     description: '新增用户',
     tags: ['用户'],
+  })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    type: CreateUserDto,
   })
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
