@@ -12,11 +12,15 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ConfigService } from '@nestjs/config';
 
 // @ApiTags('用户')
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly configService: ConfigService,
+  ) {}
 
   @ApiTags('创建用户')
   @ApiOperation({
@@ -36,6 +40,8 @@ export class UserController {
   @ApiTags('获取所有用户')
   @Get()
   findAll() {
+    // 使用环境变量
+    console.log('ENV:URL:', this.configService.get<string>('database.url'));
     return this.userService.findAll();
   }
 

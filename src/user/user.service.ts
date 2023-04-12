@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
@@ -9,6 +9,7 @@ export class UserService {
   }
 
   findAll() {
+    // throw new HttpException('自定义异常', HttpStatus.INTERNAL_SERVER_ERROR); // 抛出异常
     return `This action returns all user`;
   }
 
