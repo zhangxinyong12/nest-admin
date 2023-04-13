@@ -1,14 +1,27 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { MongoRepository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.mongo.entity';
 
 @Injectable()
 export class UserService {
+  constructor(
+    @Inject('USER_REPOSITORY')
+    private userRepository: MongoRepository<User>,
+  ) {}
+
   create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+    return this.userRepository.save(createUserDto);
   }
 
-  findAll() {
+  async findAll() {
+    const data = await this.userRepository.find();
+    return {
+      code: 200,
+      data,
+      length: data.length,
+    };
     // throw new HttpException('自定义异常', HttpStatus.INTERNAL_SERVER_ERROR); // 抛出异常
     return `This action returns all user`;
   }
@@ -23,5 +36,18 @@ export class UserService {
 
   remove(id: number) {
     return `This action removes a #${id} user`;
+  }
+
+  // 删除全部数据
+  async removeAll() {
+    const data = await this.userRepository.find();
+    data.forEach(async (item) => {
+      await this.userRepository.delete(item._id);
+    });
+    return {
+      code: 200,
+      data,
+      length: data.length,
+    };
   }
 }

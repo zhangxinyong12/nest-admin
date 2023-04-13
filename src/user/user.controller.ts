@@ -62,4 +62,10 @@ export class UserController {
   remove(@Param('id') id: string) {
     return this.userService.remove(+id);
   }
+
+  @ApiTags('删除所有用户')
+  @Delete()
+  removeAll() {
+    return this.userService.removeAll();
+  }
 }
