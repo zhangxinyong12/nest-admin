@@ -32,8 +32,8 @@ export class AppLogger {
         new transports.File({
           filename: 'logs/combined.log',
           // zippedArchive: true,
-          maxsize: 1024,
-          maxFiles: 5,
+          maxsize: 1024 * 1024 * 5, // 大小
+          maxFiles: 10,
         }),
       ],
     });

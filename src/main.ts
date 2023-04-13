@@ -4,6 +4,8 @@ import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './common/exceptions/base.exception.filter';
 import { HttpExceptionFilter } from './common/exceptions/http.exception.filter';
 import { generateDocument } from './doc';
+// 不限制监听数量
+process.setMaxListeners(0);
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
