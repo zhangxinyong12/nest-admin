@@ -26,15 +26,16 @@ export class UserService {
     return `This action returns all user`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  findOne(id: string) {
+    console.log(id);
+    return this.userRepository.findOneBy(id);
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  update(id: string, updateUserDto: UpdateUserDto) {
+    return this.userRepository.update(id, updateUserDto);
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} user`;
   }
 
@@ -42,7 +43,7 @@ export class UserService {
   async removeAll() {
     const data = await this.userRepository.find();
     data.forEach(async (item) => {
-      await this.userRepository.delete(item._id);
+      await this.userRepository.delete(item.id);
     });
     return {
       code: 200,

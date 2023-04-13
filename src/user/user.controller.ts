@@ -48,19 +48,22 @@ export class UserController {
   @ApiTags('获取单个用户')
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+    console.log(id);
+
+    return this.userService.findOne(id);
   }
 
   @ApiTags('更新用户')
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+    console.log(id);
+    return this.userService.update(id, updateUserDto);
   }
 
   @ApiTags('删除用户')
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+    return this.userService.remove(id);
   }
 
   @ApiTags('删除所有用户')
