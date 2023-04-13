@@ -226,3 +226,22 @@ Schematics available on @nestjs/schematics collection:
 -  @Allow()	当没有为它指定其他约束时，防止剥离该属性。
 
 
+##　winston 字段简介filename：输出的文件名字
+- datePattern：时间格式化
+- zippedArchive：将旧日志压缩存起来
+- maxSize：单个文件最大多少m
+- maxFiles:10d,100m分别为保存10天，10天以前的自动删除，文件大小超过100m时将旧文件删除，不写的话，猜测应该是不删除文件，源码中默认是null（待测试）
+- colorize:布尔值，是否将日志显示为彩色，但是这个需要系统支持
+- handleExceptions：捕获异常，猜测应该需要和try catch结合使用，暂时不清楚和e.stack的区别
+- level:打印什么级别的日志
+- label:在日志中加进去的，目前作用不明，但直觉应该可以作为查询时候的标记
+- timestamp：时间戳，默认不加，是一个函数，在combine中添加之后，系统会自动添加时间戳，时间戳的格式和datePattern保持一致
+- prettyPrint：美化输出日志的格式，相当于代码格式化
+- format.errors({ stack: true })：这个会输出e.stack，但是前提你要在log.error(e)中传入e,
+注意：
+- logerr.error('参数1',e);
+- logerr.error('参数1','参数2');
+这两个函数的区别是:第二个只能输出message:参数1，第一个函数：既可以输出参数1，同时能输出e.stack，- logerr.error('参数1',e); logerr.error(e); logerr.error(e,'参数1');这三个写法得到的结果是一样的
+- transports:
+- new transports.Console:打印日志到控制台
+- new (transports.DailyRotateFile)(DailyRotateFileOptions)：打印日志到文件，上面的是用了-winston-daily-rotate-file，这个插件是非常有用的，解决了按天写日志的问题

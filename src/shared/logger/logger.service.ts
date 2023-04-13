@@ -1,6 +1,7 @@
 import { Injectable, Scope } from '@nestjs/common';
+import dayjs from 'dayjs';
 import { createLogger, Logger, transports, format } from 'winston';
-
+const { combine, timestamp, printf } = format;
 type RequestContext = Record<string, any>;
 
 @Injectable({ scope: Scope.TRANSIENT })
@@ -15,12 +16,25 @@ export class AppLogger {
   constructor() {
     this.logger = createLogger({
       level: process.env.LOGGER_LEVEL || 'info', // 默认日志级别
-      format: format.combine(format.timestamp(), format.prettyPrint()),
-
+      format: format.combine(
+        format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+        format.prettyPrint(),
+      ),
       transports: [
         new transports.Console(),
-        new transports.File({ filename: 'logs/error.log', level: 'error' }),
-        new transports.File({ filename: 'logs/combined.log' }),
+        new transports.File({
+          filename: 'logs/error.log',
+          level: 'error',
+          // zippedArchive: true, // 压缩
+          maxsize: 1024 * 1024 * 10, // 大小
+          maxFiles: 5, // 最大文件数
+        }),
+        new transports.File({
+          filename: 'logs/combined.log',
+          // zippedArchive: true,
+          maxsize: 1024,
+          maxFiles: 5,
+        }),
       ],
     });
   }
