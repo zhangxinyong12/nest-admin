@@ -1,4 +1,5 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { AppLogger } from 'src/shared/logger/logger.service';
 import { MongoRepository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -9,10 +10,27 @@ export class UserService {
   constructor(
     @Inject('USER_REPOSITORY')
     private userRepository: MongoRepository<User>,
-  ) {}
+    private readonly logger: AppLogger,
+  ) {
+    this.logger.setContext(UserService.name);
+  }
 
+  // 创建用户
   create(createUserDto: CreateUserDto) {
-    return this.userRepository.save(createUserDto);
+    this.logger.log(null, 'create user', createUserDto);
+
+    return this.userRepository
+      .save(createUserDto)
+      .then((res) => {
+        return res;
+      })
+      .catch((err) => {
+        this.logger.error(null, 'create user error222', err);
+        throw new HttpException(
+          '创建用户失败1',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        ); // 抛出异常
+      });
   }
 
   async findAll() {

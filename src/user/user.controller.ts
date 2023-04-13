@@ -13,6 +13,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
+import { AppLogger } from 'src/shared/logger/logger.service';
 
 // @ApiTags('用户')
 @Controller('user')
@@ -20,7 +21,10 @@ export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly configService: ConfigService,
-  ) {}
+    private readonly logger: AppLogger,
+  ) {
+    this.logger.setContext(UserController.name);
+  }
 
   @ApiTags('创建用户')
   @ApiOperation({
@@ -34,7 +38,11 @@ export class UserController {
   })
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+    try {
+      return this.userService.create(createUserDto);
+    } catch (error) {
+      this.logger.error(null, 'create user error 11', error);
+    }
   }
 
   @ApiTags('获取所有用户')
