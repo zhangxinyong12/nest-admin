@@ -8,12 +8,12 @@ import {
   Delete,
   HttpStatus,
 } from '@nestjs/common';
-import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { AppLogger } from 'src/shared/logger/logger.service';
+import { UserService } from '../services/user.service';
+import { CreateUserDto } from '../dtos/create-user.dto';
+import { UpdateUserDto } from '../dtos/update-user.dto';
 
 // @ApiTags('用户')
 @Controller('user')
