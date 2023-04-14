@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
@@ -14,6 +15,7 @@ import { AppLogger } from 'src/shared/logger/logger.service';
 import { UserService } from '../services/user.service';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { UpdateUserDto } from '../dtos/update-user.dto';
+import { PaginationParamsDto } from 'src/shared/dtos/pagination-params.dto';
 
 // @ApiTags('用户')
 @Controller('user')
@@ -47,10 +49,11 @@ export class UserController {
 
   @ApiTags('获取所有用户')
   @Get()
-  findAll() {
+  findAll(@Body() body: PaginationParamsDto) {
+    console.log('body分页', body);
     // 使用环境变量
-    console.log('ENV:URL:', this.configService.get<string>('database.url'));
-    return this.userService.findAll();
+    // console.log('ENV:URL:', this.configService.get<string>('database.url'));
+    return this.userService.findAll(body);
   }
 
   @ApiTags('获取单个用户')

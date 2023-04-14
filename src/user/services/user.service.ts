@@ -1,6 +1,14 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  Query,
+} from '@nestjs/common';
+import { PaginationParamsDto } from 'src/shared/dtos/pagination-params.dto';
 import { AppLogger } from 'src/shared/logger/logger.service';
-import { MongoRepository } from 'typeorm';
+import { Like, MongoRepository } from 'typeorm';
+import { MongoFindManyOptions } from 'typeorm/find-options/mongodb/MongoFindManyOptions';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { UpdateUserDto } from '../dtos/update-user.dto';
 import { User } from '../entities/user.mongo.entity';
@@ -42,15 +50,31 @@ export class UserService {
       });
   }
 
-  async findAll() {
-    const [data, count] = await this.userRepository.findAndCount();
+  // 模糊查询 分页接口
+  async findAll({ page, pageSize, params }: PaginationParamsDto) {
+    const { name, phone, email } = params;
+
+    const query: MongoFindManyOptions<User> = {
+      order: {
+        updatedDate: 'DESC',
+      },
+      skip: (page - 1) * pageSize,
+      take: pageSize * 1,
+      cache: true,
+      where: {
+        ...(name ? { name: Like(`%${name}%`) } : {}),
+        ...(phone ? { phone: Like(`%${phone}%`) } : {}),
+        ...(email ? { email: Like(`%${email}%`) } : {}),
+      },
+    };
+
+    console.log('query', query);
+    const [data, count] = await this.userRepository.findAndCount(query);
     return {
       code: 200,
       data,
       count,
     };
-    // throw new HttpException('自定义异常', HttpStatus.INTERNAL_SERVER_ERROR); // 抛出异常
-    return `This action returns all user`;
   }
 
   async findOne(id: string) {
