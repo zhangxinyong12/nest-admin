@@ -16,9 +16,17 @@ export class UserService {
   }
 
   // 创建用户
-  create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto) {
     this.logger.log(null, 'create user', createUserDto);
 
+    // 用户名和手机号必须唯一
+    const user = await this.userRepository.findOneBy({
+      name: createUserDto.name,
+      phone: createUserDto.phone,
+    });
+    if (user) {
+      throw new HttpException('用户名或手机号已存在', HttpStatus.BAD_REQUEST);
+    }
     return this.userRepository
       .save(createUserDto)
       .then((res) => {
@@ -44,17 +52,24 @@ export class UserService {
     return `This action returns all user`;
   }
 
-  findOne(id: string) {
+  async findOne(id: string) {
     console.log(id);
-    return this.userRepository.findOneBy(id);
+    const findData = await this.userRepository.findOneBy(id);
+    if (!findData) {
+      throw new HttpException('用户不存在', HttpStatus.BAD_REQUEST);
+    }
+    return findData;
   }
 
-  update(id: string, updateUserDto: UpdateUserDto) {
-    return this.userRepository.update(id, updateUserDto);
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    await this.findOne(id);
+    await this.userRepository.update(id, updateUserDto);
+    return this.findOne(id);
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} user`;
+  async remove(id: string) {
+    await this.findOne(id);
+    return this.userRepository.delete(id);
   }
 
   // 删除全部数据
