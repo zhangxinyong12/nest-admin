@@ -20,11 +20,12 @@ export class UserService {
     this.logger.log(null, 'create user', createUserDto);
 
     // 用户名和手机号必须唯一
-    const user = await this.userRepository.findOneBy({
-      name: createUserDto.name,
-      phone: createUserDto.phone,
+    const user = await this.userRepository.find({
+      where: {
+        $or: [{ name: createUserDto.name }, { phone: createUserDto.phone }],
+      },
     });
-    if (user) {
+    if (user.length) {
       throw new HttpException('用户名或手机号已存在', HttpStatus.BAD_REQUEST);
     }
     return this.userRepository
