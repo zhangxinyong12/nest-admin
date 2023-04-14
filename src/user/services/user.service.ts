@@ -20,14 +20,14 @@ export class UserService {
     this.logger.log(null, 'create user', createUserDto);
 
     // 用户名和手机号必须唯一
-    const user = await this.userRepository.find({
-      where: {
-        $or: [{ name: createUserDto.name }, { phone: createUserDto.phone }],
-      },
-    });
-    if (user.length) {
-      throw new HttpException('用户名或手机号已存在', HttpStatus.BAD_REQUEST);
-    }
+    // const user = await this.userRepository.find({
+    //   where: {
+    //     $or: [{ name: createUserDto.name }, { phone: createUserDto.phone }],
+    //   },
+    // });
+    // if (user.length) {
+    //   throw new HttpException('用户名或手机号已存在', HttpStatus.BAD_REQUEST);
+    // }
     return this.userRepository
       .save(createUserDto)
       .then((res) => {
@@ -43,11 +43,11 @@ export class UserService {
   }
 
   async findAll() {
-    const data = await this.userRepository.find();
+    const [data, count] = await this.userRepository.findAndCount();
     return {
       code: 200,
       data,
-      length: data.length,
+      count,
     };
     // throw new HttpException('自定义异常', HttpStatus.INTERNAL_SERVER_ERROR); // 抛出异常
     return `This action returns all user`;
