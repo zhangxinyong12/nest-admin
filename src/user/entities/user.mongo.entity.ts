@@ -1,3 +1,4 @@
+import { Common } from 'src/shared/entities/common.entity';
 import {
   Column,
   CreateDateColumn,
@@ -8,10 +9,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class User {
-  @ObjectIdColumn()
-  id: ObjectId;
-
+export class User extends Common {
   @Column({ length: 11 })
   phone: string;
 
@@ -23,10 +21,4 @@ export class User {
 
   @Column()
   password: string;
-
-  @CreateDateColumn()
-  createdDate: Date;
-
-  @UpdateDateColumn()
-  updatedDate: Date;
 }
