@@ -62,6 +62,7 @@ export class UserService {
       take: pageSize * 1,
       cache: true,
       where: {
+        // TODO 模糊查询无效
         ...(name ? { name: Like(`%${name}%`) } : {}),
         ...(phone ? { phone: Like(`%${phone}%`) } : {}),
         ...(email ? { email: Like(`%${email}%`) } : {}),
