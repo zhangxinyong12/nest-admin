@@ -469,3 +469,13 @@ export declare class MongoRepository<Entity extends ObjectLiteral> extends Repos
 }
 
 ```
+
+## 映射类型
+[文档地址](https://docs.nestjs.cn/9/techniques?id=%e9%aa%8c%e8%af%81)
+- PartialType 必填变成可选  
+PartialType() 函数返回一个类型（一个类）包含被设置成可选的所有输入类型的属性。 
+- PickType 选择类型  
+PickType() 函数通过挑出输入类型的一组属性构造一个新的类型（类）。
+
+- OmitType() 函数通过挑出输入类型中的全部属性，然后移除一组特定的属性构造一个类型
+- IntersectionType() 函数将两个类型合并成一个类型。
