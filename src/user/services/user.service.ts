@@ -62,8 +62,8 @@ export class UserService {
       take: pageSize * 1,
       cache: true,
       where: {
-        // TODO 模糊查询无效
-        ...(name ? { name: Like(`%${name}%`) } : {}),
+        // TODO 模糊查询无效,Like不行？。需要使用正则表达式
+        ...(name ? { name: new RegExp(`${name}`) } : {}),
         ...(phone ? { phone: Like(`%${phone}%`) } : {}),
         ...(email ? { email: Like(`%${email}%`) } : {}),
       },
