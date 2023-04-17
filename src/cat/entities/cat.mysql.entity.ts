@@ -1,15 +1,35 @@
 import { OmitType } from '@nestjs/swagger';
 import { Common } from 'src/shared/entities/common.entity';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 @Entity()
-class BaseCat extends Common {}
-
-@Entity()
-export class Cat {
+class Base {
   // 自增长id
   @PrimaryGeneratedColumn()
   id: number;
 
+  @CreateDateColumn()
+  createdDate: Date;
+
+  @UpdateDateColumn()
+  updatedDate: Date;
+
+  // 软删除
+  @Column({ default: false, select: false })
+  deleted: boolean;
+
+  // 更新次数
+  @Column({ default: 0, select: false })
+  updateCount: number;
+}
+
+@Entity()
+export class Cat extends Base {
   @Column({
     type: 'varchar',
     length: 20,

@@ -40,4 +40,9 @@ export class CatController {
   remove(@Param('id') id: string) {
     return this.catService.remove(+id);
   }
+
+  @Post('clear')
+  clear() {
+    return this.catService.clear();
+  }
 }
