@@ -4,9 +4,7 @@ import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './common/exceptions/base.exception.filter';
 import { HttpExceptionFilter } from './common/exceptions/http.exception.filter';
 import { generateDocument } from './doc';
-// 不限制监听数量
-process.setMaxListeners(0);
-
+const { APP_PORT } = process.env;
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
@@ -18,7 +16,7 @@ async function bootstrap() {
   // 场景文档
   await generateDocument(app);
 
-  await app.listen(3000);
-  console.log('http://localhost:3000');
+  await app.listen(APP_PORT);
+  console.log(`http://localhost:${APP_PORT}`);
 }
 bootstrap();
