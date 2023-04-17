@@ -64,8 +64,8 @@ export class UserService {
       where: {
         // TODO 模糊查询无效,Like不行？。需要使用正则表达式
         ...(name ? { name: new RegExp(`${name}`) } : {}),
-        ...(phone ? { phone: Like(`%${phone}%`) } : {}),
-        ...(email ? { email: Like(`%${email}%`) } : {}),
+        ...(phone ? { phone: new RegExp(`${phone}`) } : {}),
+        ...(email ? { email: new RegExp(`${email}`) } : {}),
       },
     };
 
