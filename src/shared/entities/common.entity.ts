@@ -14,10 +14,10 @@ export abstract class Common {
   id: ObjectId;
 
   @CreateDateColumn()
-  createdDate: Date;
+  createdAt: Date;
 
   @UpdateDateColumn()
-  updatedDate: Date;
+  updatedAt: Date;
 
   // 软删除
   @Column({ default: false, select: false })

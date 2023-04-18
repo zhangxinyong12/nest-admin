@@ -7,7 +7,7 @@
 
     const query: MongoFindManyOptions<User> = {
       order: {
-        updatedDate: 'DESC',
+        updatedAt: 'DESC',
       },
       skip: (page - 1) * pageSize,
       take: pageSize * 1,

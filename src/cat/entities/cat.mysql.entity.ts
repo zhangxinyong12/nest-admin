@@ -17,7 +17,7 @@ class Base {
   createdDate: Date;
 
   @UpdateDateColumn()
-  updatedDate: Date;
+  updatedAt: Date;
 
   // 软删除
   @Column({ default: false, select: false })
