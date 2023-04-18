@@ -23,16 +23,22 @@ export class CatService {
   }
 
   async findOne(id: number) {
-    const findData = this.catRepository.findOneBy({ id });
-
-    return findData;
+    const findData = await this.catRepository.findOneBy({ id });
+    return { findData };
   }
 
   async update(id: number, updateCatDto: UpdateCatDto) {
-    return this.catRepository.update(id, updateCatDto);
+    await this.catRepository.update(id, updateCatDto);
+    return this.catRepository.findOneBy({ id });
   }
 
   async remove(id: number) {
-    return this.catRepository.recover({ id });
+    return this.catRepository.delete({ id });
+  }
+
+  async clear() {
+    const [data, count] = await this.catRepository.findAndCount();
+    await this.catRepository.clear();
+    return { data: `清空成功${count}条数据` };
   }
 }
