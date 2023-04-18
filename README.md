@@ -483,3 +483,27 @@ PickType() 函数通过挑出输入类型的一组属性构造一个新的类型
 - DTO 是数据传输对象，用于接收请求数据，或者返回响应数据。
 - Entity 是实体对象，用于操作数据库，或者返回响应数据。
 ![如图](./docImg/479fd71aa797eaaa3a21516cd626d42.png)
+
+##　Winston
+Winston 是一个流行的 Node.js 日志记录库。它支持多种日志级别，包括：
+```
+error：用于记录错误事件
+warn：用于记录警告事件
+info：用于记录有意义的事件信息
+verbose：用于记录详细信息
+debug：用于调试应用程序
+silly：用于记录无关紧要的信息
+```
+
+您可以根据需要通过 Logger.level 属性设置全局日志级别或为特定传输器设置单独的日志级别。默认日志级别为 info。例如，以下代码将日志级别设置为 debug：
+```
+
+const winston = require('winston');
+
+const logger = winston.createLogger({
+    level: 'debug',
+    transports: [new winston.transports.Console()]
+});
+```
+
+这将启用所有日志级别，从 error 到 silly。请注意，在生产环境中，仅应启用必要的日志级别以避免不必要的性能开销。
