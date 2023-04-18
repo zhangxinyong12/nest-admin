@@ -18,7 +18,7 @@ export const DatabaseProviders = [
         password: configService.get<string>('database.mongodb.pass'),
         database: configService.get<string>('database.mongodb.name'),
         entities: [path.join(__dirname, `../../**/*.mongo.entity{.ts,.js}`)],
-        logging: configService.get<boolean>('database.mongodb.logging'),
+        logging: configService.get<boolean>('database.mongodb.logging'), // 这个配置项在mongodb中无效 https://github.com/typeorm/typeorm/issues/1934
         synchronize: configService.get<boolean>('database.mongodb.synchronize'),
       };
 
