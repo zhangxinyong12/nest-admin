@@ -8,14 +8,25 @@ import {
   Delete,
   HttpStatus,
   Query,
+  Req,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+
+import { FileInterceptor } from '@nestjs/platform-express';
+import {
+  ApiConsumes,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import { AppLogger } from 'src/shared/logger/logger.service';
 import { UserService } from '../services/user.service';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { UpdateUserDto } from '../dtos/update-user.dto';
 import { PaginationParamsDto } from 'src/shared/dtos/pagination-params.dto';
+import { UploadDTO } from '../dtos/upload.dto';
 
 // @ApiTags('用户')
 @Controller('user')
@@ -81,5 +92,20 @@ export class UserController {
   @Delete()
   removeAll() {
     return this.userService.removeAll();
+  }
+
+  @Post('upload')
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('file'))
+  async upload(
+    @Req() req: any,
+    @Body() uploadDTO: UploadDTO,
+    @UploadedFile() file,
+  ) {
+    console.log('uploadDTO', uploadDTO);
+    console.log('file', file);
+    return {
+      url: `http://localhost:3000/uploads/${file.originalname}`,
+    };
   }
 }
