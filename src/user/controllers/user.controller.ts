@@ -103,11 +103,7 @@ export class UserController {
     @Body() uploadDTO: UploadDTO,
     @UploadedFile() file,
   ) {
-    console.log('uploadDTO', uploadDTO);
-    console.log('file', file);
-    return {
-      url: `http://localhost:3000/uploads/${file.originalname}`,
-      hash: getFileHash(file.buffer),
-    };
+    console.log('uploadDTO', uploadDTO.name);
+    return this.userService.uploadAvatar(file);
   }
 }

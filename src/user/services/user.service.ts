@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { PaginationParamsDto } from 'src/shared/dtos/pagination-params.dto';
 import { AppLogger } from 'src/shared/logger/logger.service';
+import { UploadService } from 'src/shared/upload/upload.service';
 import {
   encryptPassword,
   makeSalt,
@@ -24,6 +25,7 @@ export class UserService {
     @Inject('USER_REPOSITORY')
     private userRepository: MongoRepository<User>,
     private readonly logger: AppLogger,
+    private readonly uploadService: UploadService,
   ) {
     this.logger.setContext(UserService.name);
   }
@@ -134,5 +136,13 @@ export class UserService {
       data,
       length: data.length,
     };
+  }
+
+  /**
+   * 上传头像
+   */
+  async uploadAvatar(file) {
+    const { url } = await this.uploadService.upload(file);
+    return { data: url };
   }
 }
