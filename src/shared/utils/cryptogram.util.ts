@@ -15,3 +15,8 @@ export function encryptPassword(password: string, salt: string): string {
     .pbkdf2Sync(password, tempSalt, 10000, 64, 'sha1')
     .toString('base64');
 }
+
+// 根据文件buffer生成文件hash
+export function getFileHash(buffer: Buffer): string {
+  return crypto.createHash('md5').update(buffer).digest('hex');
+}

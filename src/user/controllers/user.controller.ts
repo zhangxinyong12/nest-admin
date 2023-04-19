@@ -27,6 +27,7 @@ import { CreateUserDto } from '../dtos/create-user.dto';
 import { UpdateUserDto } from '../dtos/update-user.dto';
 import { PaginationParamsDto } from 'src/shared/dtos/pagination-params.dto';
 import { UploadDTO } from '../dtos/upload.dto';
+import { getFileHash } from 'src/shared/utils/cryptogram.util';
 
 // @ApiTags('用户')
 @Controller('user')
@@ -106,6 +107,7 @@ export class UserController {
     console.log('file', file);
     return {
       url: `http://localhost:3000/uploads/${file.originalname}`,
+      hash: getFileHash(file.buffer),
     };
   }
 }

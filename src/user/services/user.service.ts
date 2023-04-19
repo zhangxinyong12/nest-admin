@@ -7,7 +7,11 @@ import {
 } from '@nestjs/common';
 import { PaginationParamsDto } from 'src/shared/dtos/pagination-params.dto';
 import { AppLogger } from 'src/shared/logger/logger.service';
-import { encryptPassword, makeSalt } from 'src/shared/utils/cryptogram.util';
+import {
+  encryptPassword,
+  makeSalt,
+  getFileHash,
+} from 'src/shared/utils/cryptogram.util';
 import { Like, MongoRepository } from 'typeorm';
 import { MongoFindManyOptions } from 'typeorm/find-options/mongodb/MongoFindManyOptions';
 import { CreateUserDto } from '../dtos/create-user.dto';
@@ -47,6 +51,7 @@ export class UserService {
       throw new HttpException('用户名或手机号已存在', HttpStatus.BAD_REQUEST);
     }
     const { salt, hashPassword } = this.getPassword(user.password);
+
     user.salt = salt;
     user.password = hashPassword;
 
