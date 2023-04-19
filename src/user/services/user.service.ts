@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { PaginationParamsDto } from 'src/shared/dtos/pagination-params.dto';
 import { AppLogger } from 'src/shared/logger/logger.service';
+import { encryptPassword, makeSalt } from 'src/shared/utils/cryptogram.util';
 import { Like, MongoRepository } from 'typeorm';
 import { MongoFindManyOptions } from 'typeorm/find-options/mongodb/MongoFindManyOptions';
 import { CreateUserDto } from '../dtos/create-user.dto';
@@ -22,22 +23,35 @@ export class UserService {
   ) {
     this.logger.setContext(UserService.name);
   }
+  // 加密密码
+  getPassword(password: string): {
+    salt: string;
+    hashPassword: string;
+  } {
+    const salt = makeSalt(); // 制作密码盐
+    const hashPassword = encryptPassword(password, salt); // 加密密码
+    return { salt, hashPassword };
+  }
 
   // 创建用户
-  async create(createUserDto: CreateUserDto) {
-    this.logger.log(null, 'create user', createUserDto);
+  async create(user: CreateUserDto) {
+    this.logger.log(null, 'create user', user);
 
     // 用户名和手机号必须唯一
-    // const user = await this.userRepository.find({
-    //   where: {
-    //     $or: [{ name: createUserDto.name }, { phone: createUserDto.phone }],
-    //   },
-    // });
-    // if (user.length) {
-    //   throw new HttpException('用户名或手机号已存在', HttpStatus.BAD_REQUEST);
-    // }
+    const findData = await this.userRepository.find({
+      where: {
+        $or: [{ name: user.name }, { phone: user.phone }],
+      },
+    });
+    if (findData.length) {
+      throw new HttpException('用户名或手机号已存在', HttpStatus.BAD_REQUEST);
+    }
+    const { salt, hashPassword } = this.getPassword(user.password);
+    user.salt = salt;
+    user.password = hashPassword;
+
     return this.userRepository
-      .save(createUserDto)
+      .save(user)
       .then((res) => {
         return res;
       })
@@ -87,9 +101,15 @@ export class UserService {
     return findData;
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto) {
+  async update(id: string, user: UpdateUserDto) {
     await this.findOne(id);
-    await this.userRepository.update(id, updateUserDto);
+    /// 如果更新密码
+    if (user.password) {
+      const { salt, hashPassword } = this.getPassword(user.password);
+      user.salt = salt;
+      user.password = hashPassword;
+    }
+    await this.userRepository.update(id, user);
     return this.findOne(id);
   }
 
