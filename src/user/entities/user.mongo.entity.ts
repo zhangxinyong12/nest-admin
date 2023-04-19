@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongodb';
 import { Common } from 'src/shared/entities/common.entity';
 import {
   Column,
@@ -6,7 +7,7 @@ import {
   ObjectIdColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { ObjectId } from 'mongoose';
+// import { ObjectId } from 'mongoose';
 @Entity()
 export class User extends Common {
   // 昵称
