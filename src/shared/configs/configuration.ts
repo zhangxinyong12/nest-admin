@@ -20,11 +20,11 @@ export default (): any => {
         synchronize: process.env.DB_MYSQL_SYNCHRONIZE === 'true',
         logging: process.env.DB_MYSQL_LOGGING === 'true',
       },
-      jwt: {
-        secret: process.env.JWT_SECRET, // 秘钥
-        signOptions: {
-          expiresIn: process.env.JWT_EXPIRES_IN, // 过期时间
-        },
+    },
+    jwt: {
+      secret: process.env.JWT_SECRET, // 秘钥
+      signOptions: {
+        expiresIn: process.env.JWT_EXPIRES_IN, // 过期时间
       },
     },
   };

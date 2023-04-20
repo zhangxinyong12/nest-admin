@@ -17,7 +17,6 @@ export class AuthService {
   async createToken(user: User) {
     const payload = { id: user.id };
     console.log(1111111, payload);
-    // TOOD 有报错
     const token = this.jwtService.sign(payload);
     return token;
   }

@@ -16,7 +16,9 @@ import { JwtModule } from '@nestjs/jwt';
     JwtModule.registerAsync({
       inject: [ConfigService], // 注入 ConfigService
       imports: [ShareModule],
-      useFactory: (configService: ConfigService) => configService.get('jwt'),
+      useFactory: (configService: ConfigService) => {
+        return configService.get('jwt');
+      },
     }),
   ],
   controllers: [UserController, RoleController, AuthController],
