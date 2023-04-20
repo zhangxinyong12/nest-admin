@@ -3,9 +3,11 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import { AppModule } from './app.module';
-import { AllExceptionsFilter } from './common/exceptions/base.exception.filter';
+import { BaseExceptionsFilter } from './common/exceptions/base.exception.filter';
 import { HttpExceptionFilter } from './common/exceptions/http.exception.filter';
+import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 import { generateDocument } from './doc';
+import { AppLogger } from './shared/logger/logger.service';
 const { APP_PORT } = process.env;
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -17,8 +19,23 @@ async function bootstrap() {
     }),
   );
 
+  const appLogger = await app.resolve<AppLogger>(AppLogger);
+  // 添加请求日志中间件
+  app.use((req, res, next) => {
+    appLogger.logRequest(req);
+    next();
+  });
+
+  // 统一响应体格式
+  app.useGlobalInterceptors(new TransformInterceptor());
+
   // 异常过滤器
-  // app.useGlobalFilters(new AllExceptionsFilter(), new HttpExceptionFilter());
+  // TODO 造成接口响应变慢？记录了太多垃圾信息
+  app.useGlobalFilters(
+    new BaseExceptionsFilter(appLogger),
+    new HttpExceptionFilter(appLogger),
+  );
+
   // 场景文档
   await generateDocument(app);
 

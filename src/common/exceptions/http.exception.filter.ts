@@ -16,12 +16,31 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
     const status = exception.getStatus();
-    this.logger.error(ctx, 'HttpExceptionFilter', { request, response });
+
+    const req = ctx.getRequest();
+    const method = req.method;
+    const headers = req.headers;
+    const body = req.body;
+    const params = req.params;
+    const ip = req.ip;
+    const userAgent = headers['user-agent'];
+
+    this.logger.error(null, 'HttpExceptionFilter', {
+      method,
+      path: request.url,
+      headers,
+      body,
+      params,
+      ip,
+      userAgent,
+      status,
+      request: request.params,
+      response: exception.getResponse(),
+    });
 
     response.status(status).send({
-      statusCode: status,
-      timestamp: new Date().toISOString(),
-      path: request.url,
+      code: status,
+      success: false,
       message: exception.getResponse(),
     });
   }

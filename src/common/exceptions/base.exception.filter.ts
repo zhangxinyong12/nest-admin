@@ -9,8 +9,9 @@ import {
 import { Request, Response } from 'express';
 import { AppLogger } from 'src/shared/logger/logger.service';
 
+// 不一定是http错误，可能是代码逻辑错误
 @Catch()
-export class AllExceptionsFilter implements ExceptionFilter {
+export class BaseExceptionsFilter implements ExceptionFilter {
   constructor(private readonly logger: AppLogger) {}
 
   catch(exception: Error, host: ArgumentsHost) {
@@ -18,13 +19,30 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
 
-    this.logger.error(ctx, 'HttpExceptionFilter', { request, response });
+    const req = ctx.getRequest();
+    const method = req.method;
+    const headers = req.headers;
+    const body = req.body;
+    const params = req.params;
+    const ip = req.ip;
+    const userAgent = headers['user-agent'];
+
+    this.logger.error(null, 'HttpExceptionFilter', {
+      method,
+      path: request.url,
+      headers,
+      body,
+      params,
+      ip,
+      userAgent,
+      request: request.params,
+      response: new ServiceUnavailableException().getResponse(),
+    });
 
     // 非 HTTP 标准异常的处理。
     response.status(HttpStatus.SERVICE_UNAVAILABLE).send({
-      statusCode: HttpStatus.SERVICE_UNAVAILABLE,
-      timestamp: new Date().toISOString(),
-      path: request.url,
+      code: HttpStatus.SERVICE_UNAVAILABLE,
+      success: false,
       message: new ServiceUnavailableException().getResponse(),
     });
   }

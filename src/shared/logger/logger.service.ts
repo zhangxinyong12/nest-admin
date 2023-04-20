@@ -1,6 +1,7 @@
 import { Injectable, Scope } from '@nestjs/common';
 import dayjs from 'dayjs';
 import { createLogger, Logger, transports, format } from 'winston';
+import { Request, Response } from 'express';
 const { combine, timestamp, printf } = format;
 type RequestContext = Record<string, any>;
 
@@ -36,6 +37,41 @@ export class AppLogger {
           maxFiles: 10,
         }),
       ],
+    });
+  }
+
+  // 请求日志
+  public logRequest(req: Request): void {
+    const message = `${req.method} ${req.url}`;
+    const ctx = {
+      headers: req.headers,
+      params: req.params,
+      query: req.query,
+      body: req.body,
+      ip: req.ip,
+    };
+    this.logger.info({
+      message,
+      contextName: this.context,
+      ctx,
+    });
+  }
+
+  // 请求错误日志
+  public logRequestError(req: Request, error: Error): void {
+    const message = `${req.method} ${req.url} - ${error.message}`;
+    const ctx = {
+      headers: req.headers,
+      params: req.params,
+      query: req.query,
+      body: req.body,
+      ip: req.ip,
+    };
+    this.logger.error({
+      message,
+      contextName: this.context,
+      ctx,
+      stack: error.stack,
     });
   }
 
