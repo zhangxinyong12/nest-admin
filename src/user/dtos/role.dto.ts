@@ -1,11 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, Matches } from 'class-validator';
-import { ObjectId, ObjectIdColumn, Unique } from 'typeorm';
+import { ObjectID, ObjectIdColumn, Unique } from 'typeorm';
 import { IdDTO } from '../../shared/dtos/id.dto';
 
 export class CreateRoleDto {
   @ObjectIdColumn()
-  id: ObjectId;
+  id: ObjectID;
 
   @ApiProperty({ example: 'admin' })
   @IsNotEmpty()

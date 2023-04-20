@@ -1,3 +1,5 @@
+## 切记
+项目已经锁死mongodb 和typeorm版本号。切勿升级，会有莫名其妙的错误。未知。。。。。。。。。
 ## TODO
 - typeorm中使用mongodb，Like查询不到数据,需要使用正则
 ```
