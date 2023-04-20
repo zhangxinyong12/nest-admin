@@ -9,13 +9,13 @@ import { Http } from 'winston/lib/winston/transports';
 export class RoleService {
   constructor(
     @Inject('ROLE_REPOSITORY')
-    private RoleRepository: MongoRepository<Role>,
+    private roleRepository: MongoRepository<Role>,
   ) {}
 
   async create(Role: CreateRoleDto) {
     // name 为唯一值，如果已经存在则不创建
     const { name } = Role;
-    const isCreate = await this.RoleRepository.findOne({
+    const isCreate = await this.roleRepository.findOne({
       where: { name },
     });
     console.log(isCreate);
@@ -23,14 +23,14 @@ export class RoleService {
       throw new HttpException(`角色${name}已存在`, HttpStatus.NOT_IMPLEMENTED);
     }
 
-    return this.RoleRepository.save(Role);
+    return this.roleRepository.save(Role);
   }
 
   async findAll({
     pageSize,
     page,
   }: PaginationParamsDto): Promise<{ data: Role[]; count: number }> {
-    const [data, count] = await this.RoleRepository.findAndCount({
+    const [data, count] = await this.roleRepository.findAndCount({
       order: { createdAt: 'DESC' },
       skip: (page - 1) * pageSize,
       take: pageSize * 1,
@@ -43,7 +43,7 @@ export class RoleService {
   }
 
   async findOne(id: string) {
-    return await this.RoleRepository.findOneBy(id);
+    return await this.roleRepository.findOneBy(id);
   }
 
   async update(id: string, Role: CreateRoleDto) {
@@ -51,17 +51,17 @@ export class RoleService {
     ['_id', 'createdAt', 'updatedAt'].forEach((k) => delete Role[k]);
     // 更新时间戳
     // course.updatedAt = new Date()
-    return await this.RoleRepository.update(id, Role);
+    return await this.roleRepository.update(id, Role);
   }
 
   async remove(id: string): Promise<any> {
-    return await this.RoleRepository.delete(id);
+    return await this.roleRepository.delete(id);
   }
 
   async clearAll(): Promise<any> {
-    const [data, count] = await this.RoleRepository.findAndCount();
+    const [data, count] = await this.roleRepository.findAndCount();
     if (count > 0) {
-      return await this.RoleRepository.clear();
+      return await this.roleRepository.clear();
     } else {
       return Promise.resolve();
     }
