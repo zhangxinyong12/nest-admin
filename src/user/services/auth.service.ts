@@ -47,9 +47,7 @@ export class AuthService {
     const user = await this.checkLoginForm(loginDTO);
     const token = await this.createToken(user);
     return {
-      data: {
-        token,
-      },
+      token,
     };
   }
 }

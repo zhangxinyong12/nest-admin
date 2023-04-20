@@ -93,9 +93,10 @@ export class UserService {
     console.log('query', query);
     const [data, count] = await this.userRepository.findAndCount(query);
     return {
-      code: 200,
-      data,
-      count,
+      item: data,
+      pageSize,
+      page,
+      total: count,
     };
   }
 
@@ -132,7 +133,6 @@ export class UserService {
       await this.userRepository.delete(item.id);
     });
     return {
-      code: 200,
       data,
       length: data.length,
     };
