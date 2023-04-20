@@ -1,7 +1,5 @@
 ## mongodb id查询无效
 项目已经锁死mongodb 和typeorm版本号。切勿升级，会有莫名其妙的错误。              
-问题找到了，哈哈哈。我还是准备升级
-![gpt回答](./docImg/1147575ba9f411d96caa257169e92cd.png)
 ## TODO
 - typeorm中使用mongodb，Like查询不到数据,需要使用正则
 ```

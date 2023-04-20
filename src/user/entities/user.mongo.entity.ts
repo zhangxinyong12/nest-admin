@@ -1,4 +1,4 @@
-import { ObjectId } from 'mongodb';
+import { ObjectID } from 'mongodb';
 import { Common } from 'src/shared/entities/common.entity';
 import {
   Column,
@@ -29,7 +29,7 @@ export class User extends Common {
   password: string;
 
   @Column()
-  role?: ObjectId;
+  role?: ObjectID;
 
   @Column()
   job: string;

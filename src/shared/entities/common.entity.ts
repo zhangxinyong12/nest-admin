@@ -2,8 +2,8 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  ObjectId,
   ObjectIdColumn,
+  ObjectID,
   UpdateDateColumn,
 } from 'typeorm';
 
@@ -11,7 +11,7 @@ import {
 // 公共字段
 export abstract class Common {
   @ObjectIdColumn()
-  id: ObjectId;
+  id: ObjectID;
 
   @CreateDateColumn()
   createdAt: Date;
