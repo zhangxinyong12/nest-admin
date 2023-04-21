@@ -38,6 +38,7 @@
 [wolai学习笔记文档](https://www.wolai.com/josephxia/vXVPVYLNLHG6GACochkc8Q)   
 [nestjs中文官网](https://docs.nestjs.cn/)         
 [typeorm中文官网](https://typeorm.devjs.cn/)
+[代码参考](https://github.com/su37josephxia/admin-server-nestjs/tree/15)
 ## cli 
 nest g    
 Generate a Nest element.    
