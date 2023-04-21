@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { UserService } from './services/user.service';
-import { ShareModule } from 'src/shared/shared.module';
+import { SharedModule } from 'src/shared/shared.module';
 import { UserProviders } from './user.providers';
 import { UserController } from './controllers/user.controller';
 import { RoleController } from './controllers/role.controller';
@@ -13,10 +13,10 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 
 @Module({
   imports: [
-    ShareModule,
+    SharedModule,
     JwtModule.registerAsync({
       inject: [ConfigService], // 注入 ConfigService
-      imports: [ShareModule],
+      imports: [SharedModule],
       useFactory: (configService: ConfigService) => {
         return configService.get('jwt');
       },
