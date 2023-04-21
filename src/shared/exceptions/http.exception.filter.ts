@@ -15,7 +15,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
-    const status = exception.getStatus();
+    let status = exception.getStatus();
 
     const req = ctx.getRequest();
     const method = req.method;
@@ -24,8 +24,16 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const params = req.params;
     const ip = req.ip;
     const userAgent = headers['user-agent'];
-
-    this.logger.error(null, 'HttpExceptionFilter', {
+    let message = exception.getResponse() as any;
+    // 401 登录过期
+    if (
+      status === 401 &&
+      (exception.getResponse() as any).message === 'Unauthorized'
+    ) {
+      status = 302;
+      message = '登录过期';
+    }
+    this.logger.error(null, 'HttpError', {
       method,
       path: request.url,
       headers,
@@ -38,10 +46,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
       response: exception.getResponse(),
     });
 
-    response.status(status).send({
+    return response.status(status).send({
       code: status,
       success: false,
-      message: exception.getResponse(),
+      message,
     });
   }
 }

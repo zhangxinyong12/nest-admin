@@ -27,7 +27,7 @@ export class BaseExceptionsFilter implements ExceptionFilter {
     const ip = req.ip;
     const userAgent = headers['user-agent'];
 
-    this.logger.error(null, 'HttpExceptionFilter', {
+    this.logger.error(null, 'NotHttpError', {
       method,
       path: request.url,
       headers,
@@ -40,7 +40,7 @@ export class BaseExceptionsFilter implements ExceptionFilter {
     });
 
     // 非 HTTP 标准异常的处理。
-    response.status(HttpStatus.SERVICE_UNAVAILABLE).send({
+    return response.status(HttpStatus.SERVICE_UNAVAILABLE).send({
       code: HttpStatus.SERVICE_UNAVAILABLE,
       success: false,
       message: new ServiceUnavailableException().getResponse(),
