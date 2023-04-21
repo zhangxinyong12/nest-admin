@@ -13,14 +13,15 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { LoginDTO } from '../dtos/login.dto';
 import {
   BaseApiErrorResponse,
   SwaggerBaseApiResponse,
 } from 'src/shared/dtos/base-api-reponse.dto';
-import { AuthService } from '../services/auth.service';
-import { UserInfoDto } from '../dtos/auth.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { LoginDTO } from './dto/login.dto';
+import { AuthService } from './auth.service';
+import { UserInfoDto } from './dto/auth.dto';
+import { Public } from './decorator/auth.decorator';
 
 @ApiTags('认证鉴权')
 @Controller('auth')
@@ -40,6 +41,7 @@ export class AuthController {
     status: HttpStatus.NOT_FOUND,
     type: BaseApiErrorResponse,
   })
+  @Public()
   @Post('login')
   async login(@Body() loginDTO: LoginDTO) {
     return this.authService.login(loginDTO);
@@ -57,7 +59,7 @@ export class AuthController {
     type: BaseApiErrorResponse,
   })
   @ApiBearerAuth()
-  @UseGuards(AuthGuard('jwt'))
+  // @UseGuards(AuthGuard('jwt'))
   @Get('info')
   // Authorization: bearer JSON_WEB_TOKEN_STRING.....
   async info(@Req() req: any) {

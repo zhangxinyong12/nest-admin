@@ -1,11 +1,11 @@
 import { MongoRepository } from 'typeorm';
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '../entities/user.mongo.entity';
-import { LoginDTO } from '../dtos/login.dto';
 import { encryptPassword } from 'src/shared/utils/cryptogram.util';
-import { UserInfoDto } from '../dtos/auth.dto';
-import { Role } from '../entities/role.mongo.entity';
+import { User } from './entities/user.mongo.entity';
+import { Role } from './entities/role.mongo.entity';
+import { LoginDTO } from './dto/login.dto';
+import { UserInfoDto } from './dto/auth.dto';
 
 @Injectable()
 export class AuthService {

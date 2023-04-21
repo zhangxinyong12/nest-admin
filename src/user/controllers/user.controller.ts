@@ -28,6 +28,7 @@ import { UpdateUserDto } from '../dtos/update-user.dto';
 import { PaginationParamsDto } from 'src/shared/dtos/pagination-params.dto';
 import { UploadDTO } from '../dtos/upload.dto';
 import { getFileHash } from 'src/shared/utils/cryptogram.util';
+import { Public } from 'src/shared/auth/decorator/auth.decorator';
 
 // @ApiTags('用户')
 @Controller('user')

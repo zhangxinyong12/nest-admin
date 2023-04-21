@@ -4,13 +4,33 @@ import { configModuleOptions } from './configs/module-options';
 import { DatabaseProviders } from './database.providers';
 import { AppLoggerModule } from './logger/logger.module';
 import { UploadService } from './upload/upload.service';
+import { AuthModule } from './auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './auth/guard/jwt-auth.guard';
 
 @Module({
   // 注入Config
-  imports: [AppLoggerModule, ConfigModule.forRoot(configModuleOptions)],
+  imports: [
+    AppLoggerModule,
+    ConfigModule.forRoot(configModuleOptions),
+    AuthModule,
+  ],
 
   // 暴露Config
-  exports: [ConfigModule, AppLoggerModule, ...DatabaseProviders, UploadService],
-  providers: [...DatabaseProviders, UploadService],
+  exports: [
+    ConfigModule,
+    AppLoggerModule,
+    ...DatabaseProviders,
+    UploadService,
+    AuthModule,
+  ],
+  providers: [
+    ...DatabaseProviders,
+    UploadService,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+  ],
 })
 export class SharedModule {}
