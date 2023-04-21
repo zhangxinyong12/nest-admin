@@ -21,8 +21,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
+    console.log('jwt', payload);
     // 如果 token 已经过期，抛出异常
+    // TODO 调整了一下目录结构，结果不走这个方法了，不知道为什么
     if (payload.exp < Date.now() / 1000) {
+      console.log('99999999999 Token 已过期');
       throw new UnauthorizedException('Token 已过期');
     }
     return {

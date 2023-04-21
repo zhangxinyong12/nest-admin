@@ -2,10 +2,10 @@ import { MongoRepository } from 'typeorm';
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { encryptPassword } from 'src/shared/utils/cryptogram.util';
-import { User } from './entities/user.mongo.entity';
-import { Role } from './entities/role.mongo.entity';
-import { LoginDTO } from './dto/login.dto';
-import { UserInfoDto } from './dto/auth.dto';
+import { User } from '../entities/user.mongo.entity';
+import { UserInfoDto } from '../dtos/auth.dto';
+import { LoginDTO } from '../dtos/login.dto';
+import { Role } from '../entities/role.mongo.entity';
 
 @Injectable()
 export class AuthService {
@@ -56,8 +56,10 @@ export class AuthService {
   }
 
   async info(id: string) {
+    console.log('iddddddddd', id);
     // 查询用户并获取权限
     const user = await this.userRepository.findOneBy(id);
+    console.log(user);
     const data: UserInfoDto = Object.assign({}, user);
     if (user.role) {
       const role = await this.roleRepository.findOneBy(user.role);

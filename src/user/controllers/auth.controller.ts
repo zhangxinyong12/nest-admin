@@ -18,10 +18,10 @@ import {
   SwaggerBaseApiResponse,
 } from 'src/shared/dtos/base-api-reponse.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { LoginDTO } from './dto/login.dto';
-import { AuthService } from './auth.service';
-import { UserInfoDto } from './dto/auth.dto';
-import { Public } from './decorator/auth.decorator';
+import { Public } from 'src/shared/auth/decorator/auth.decorator';
+import { LoginDTO } from '../dtos/login.dto';
+import { AuthService } from '../services/auth.service';
+import { UserInfoDto } from '../dtos/auth.dto';
 
 @ApiTags('认证鉴权')
 @Controller('auth')
@@ -63,7 +63,10 @@ export class AuthController {
   @Get('info')
   // Authorization: bearer JSON_WEB_TOKEN_STRING.....
   async info(@Req() req: any) {
-    console.log(req.user);
+    console.log(
+      'req.userreq.userreq.userreq.userreq.userreq.userreq.user',
+      req.user,
+    );
     const data = await this.authService.info(req.user.id);
     console.log(data);
     // delete data.password;

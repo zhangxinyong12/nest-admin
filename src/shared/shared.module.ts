@@ -5,8 +5,6 @@ import { DatabaseProviders } from './database.providers';
 import { AppLoggerModule } from './logger/logger.module';
 import { UploadService } from './upload/upload.service';
 import { AuthModule } from './auth/auth.module';
-import { APP_GUARD } from '@nestjs/core';
-import { JwtAuthGuard } from './auth/guard/jwt-auth.guard';
 
 @Module({
   // 注入Config
@@ -24,13 +22,6 @@ import { JwtAuthGuard } from './auth/guard/jwt-auth.guard';
     UploadService,
     AuthModule,
   ],
-  providers: [
-    ...DatabaseProviders,
-    UploadService,
-    {
-      provide: APP_GUARD,
-      useClass: JwtAuthGuard,
-    },
-  ],
+  providers: [...DatabaseProviders, UploadService],
 })
 export class SharedModule {}
