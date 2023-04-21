@@ -7,6 +7,7 @@ import { BaseExceptionsFilter } from './common/exceptions/base.exception.filter'
 import { HttpExceptionFilter } from './common/exceptions/http.exception.filter';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 import { generateDocument } from './doc';
+import { RemoveSensitiveInfoInterceptor } from './shared/interceptors/remove-sensitive-info.interceptor';
 import { AppLogger } from './shared/logger/logger.service';
 const { APP_PORT } = process.env;
 async function bootstrap() {
@@ -25,6 +26,11 @@ async function bootstrap() {
     appLogger.logRequest(req);
     next();
   });
+
+  // 去除敏感信息 password salt
+  app.useGlobalInterceptors(
+    new RemoveSensitiveInfoInterceptor(['password', 'salt']),
+  );
 
   // 统一响应体格式
   app.useGlobalInterceptors(new TransformInterceptor());

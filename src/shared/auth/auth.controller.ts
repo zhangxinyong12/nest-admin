@@ -66,8 +66,8 @@ export class AuthController {
     console.log(req.user);
     const data = await this.authService.info(req.user.id);
     console.log(data);
-    delete data.password;
-    delete data.salt;
+    // delete data.password;
+    // delete data.salt;
     return { data };
   }
 }
