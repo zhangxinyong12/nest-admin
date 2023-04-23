@@ -164,3 +164,15 @@ export class UserInfoVO {
 // export class UserInfoSuccessVO extends SuccessVO {
 //   data: UserInfoVO;
 // }
+
+export class CreatePhoneCodeDto {
+  @ApiProperty({ example: '13271150671' })
+  @IsNotEmpty({ message: '请输入手机号' })
+  phone: string;
+}
+
+export class CheckPhoneCodeDto extends CreatePhoneCodeDto {
+  @ApiProperty({ example: '0000' })
+  @IsNotEmpty({ message: '请输入验证码' })
+  code: string;
+}

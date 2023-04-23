@@ -6,6 +6,7 @@ import { User } from '../entities/user.mongo.entity';
 import { UserInfoDto } from '../dtos/auth.dto';
 import { LoginDTO } from '../dtos/login.dto';
 import { Role } from '../entities/role.mongo.entity';
+import { InjectRedis, Redis } from '@nestjs-modules/ioredis';
 
 @Injectable()
 export class AuthService {
@@ -15,6 +16,7 @@ export class AuthService {
     private userRepository: MongoRepository<User>,
     @Inject('ROLE_REPOSITORY')
     private roleRepository: MongoRepository<Role>,
+    @InjectRedis() private readonly redis: Redis,
   ) {}
 
   // 生成token
@@ -67,5 +69,50 @@ export class AuthService {
     }
 
     return data;
+  }
+
+  /**
+   * 随机生成4位数字验证码
+   * @returns code
+   */
+  async createCaptcha() {
+    const captcha = Math.random().toString().slice(-4);
+    return captcha;
+  }
+
+  // 拼接手机号
+  async getPhone(phone: string) {
+    const phoneStr = 'verifyCode' + phone;
+    return phoneStr;
+  }
+  /**
+   * 获取短信验证码
+   * @param phone
+   * @returns
+   */
+  async generateCode(phone: string) {
+    const redisCode = await this.redis.get(this.getPhone(phone));
+    console.log('redisCode 1', redisCode);
+    if (redisCode) {
+      throw new NotFoundException('验证码已发送，请稍后再试');
+    }
+    const captcha = await this.createCaptcha();
+    await this.redis.set(this.getPhone(phone), captcha, 'EX', 60);
+    return captcha;
+  }
+
+  /**
+   * 校验验证码
+   * @param phone
+   * @param code
+   * @returns
+   */
+  async verifyCode(phone: string, code: string) {
+    const redisCode = await this.redis.get(this.getPhone(phone));
+    console.log(redisCode, code);
+    if (redisCode !== code) {
+      throw new NotFoundException('验证码错误');
+    }
+    return true;
   }
 }

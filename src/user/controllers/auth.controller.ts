@@ -21,7 +21,11 @@ import { AuthGuard } from '@nestjs/passport';
 import { Public } from 'src/shared/auth/decorator/auth.decorator';
 import { LoginDTO } from '../dtos/login.dto';
 import { AuthService } from '../services/auth.service';
-import { UserInfoDto } from '../dtos/auth.dto';
+import {
+  CheckPhoneCodeDto,
+  CreatePhoneCodeDto,
+  UserInfoDto,
+} from '../dtos/auth.dto';
 
 @ApiTags('认证鉴权')
 @Controller('auth')
@@ -72,5 +76,37 @@ export class AuthController {
     // delete data.password;
     // delete data.salt;
     return { data };
+  }
+
+  // 根据手机号生成验证码
+  @ApiOperation({ summary: '根据手机号生成验证码' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: SwaggerBaseApiResponse({}),
+    description: '根据手机号生成验证码成功',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    type: BaseApiErrorResponse,
+  })
+  @Post('generate-code')
+  async generateCode(@Body() body: CreatePhoneCodeDto) {
+    return this.authService.generateCode(body.phone);
+  }
+
+  // 校验验证码
+  @ApiOperation({ summary: '校验验证码' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: SwaggerBaseApiResponse({}),
+    description: '校验验证码成功',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    type: BaseApiErrorResponse,
+  })
+  @Post('verify-code')
+  async verifyCode(@Body() body: CheckPhoneCodeDto) {
+    return this.authService.verifyCode(body.phone, body.code);
   }
 }

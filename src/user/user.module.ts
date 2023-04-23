@@ -7,9 +7,20 @@ import { UserProviders } from './user.providers';
 import { UserController } from './controllers/user.controller';
 import { RoleController } from './controllers/role.controller';
 import { RoleService } from './services/role.service';
+import { RedisModule } from '@nestjs-modules/ioredis';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
-  imports: [SharedModule],
+  imports: [
+    SharedModule,
+    RedisModule.forRootAsync({
+      imports: [SharedModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        config: configService.get('redis'),
+      }),
+    }),
+  ],
   controllers: [UserController, RoleController, AuthController],
   providers: [UserService, RoleService, ...UserProviders, AuthService],
 })
