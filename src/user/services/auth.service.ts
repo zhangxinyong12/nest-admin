@@ -86,7 +86,7 @@ export class AuthService {
   }
 
   // 拼接手机号
-  async getPhone(phone: string) {
+  getPhone(phone: string): string {
     const phoneStr = 'verifyCode' + phone;
     return phoneStr;
   }
@@ -96,13 +96,14 @@ export class AuthService {
    * @returns
    */
   async generateCode(phone: string) {
+    console.log('phone', phone);
     const redisCode = await this.redis.get(this.getPhone(phone));
-    console.log('redisCode 1', redisCode);
+    console.log('redisCode 1', redisCode, this.getPhone(phone));
     if (redisCode) {
       throw new HttpException(
         {
           status: 500,
-          error: 'This is a custom message',
+          error: '验证码已发送，请稍后再试',
         },
         500,
       );
