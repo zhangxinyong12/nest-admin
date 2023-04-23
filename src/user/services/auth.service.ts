@@ -1,5 +1,10 @@
 import { MongoRepository } from 'typeorm';
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  HttpException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { encryptPassword } from 'src/shared/utils/cryptogram.util';
 import { User } from '../entities/user.mongo.entity';
@@ -94,6 +99,13 @@ export class AuthService {
     const redisCode = await this.redis.get(this.getPhone(phone));
     console.log('redisCode 1', redisCode);
     if (redisCode) {
+      throw new HttpException(
+        {
+          status: 500,
+          error: 'This is a custom message',
+        },
+        500,
+      );
       throw new NotFoundException('验证码已发送，请稍后再试');
     }
     const captcha = await this.createCaptcha();
@@ -110,6 +122,16 @@ export class AuthService {
   async verifyCode(phone: string, code: string) {
     const redisCode = await this.redis.get(this.getPhone(phone));
     console.log(redisCode, code);
+    if (!redisCode) {
+      throw new HttpException(
+        {
+          status: 500,
+          error: '验证码已过期',
+        },
+        500,
+      );
+      throw new NotFoundException('验证码已过期');
+    }
     if (redisCode !== code) {
       throw new NotFoundException('验证码错误');
     }

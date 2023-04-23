@@ -46,10 +46,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
       response: exception.getResponse(),
     });
 
-    return response.status(status).send({
+    return response.status(200).send({
       code: status,
       success: false,
-      message,
+      message: message.message || message.error || '服务器错误',
     });
   }
 }

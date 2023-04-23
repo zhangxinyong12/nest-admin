@@ -510,3 +510,21 @@ const logger = winston.createLogger({
 ```
 
 这将启用所有日志级别，从 error 到 silly。请注意，在生产环境中，仅应启用必要的日志级别以避免不必要的性能开销。
+
+## nestjs 内置的http异常
+- BadRequestException：它表示客户端发送了一个无效的请求。例如，如果缺少必需的查询参数或请求体，则可能会引发此异常。
+- UnauthorizedException：这表示客户端未经身份验证或没有所需的权限来访问资源。当客户端尝试访问受保护的资源但没有提供有效的凭证时，通常会引发此异常。
+- NotFoundException：这表示客户端尝试访问不存在的资源。例如，当客户端尝试访问不存在的用户 ID 时，通常会引发此异常。
+- ForbiddenException：如名称所示，它表示客户端尝试访问被禁止的资源。当客户端尝试访问其没有权访问的资源时，通常会引发此异常。
+- NotAcceptableException：这表示客户端请求的内容类型不受支持。当客户端请求的内容类型与服务器不匹配时，通常会引发此异常。
+- RequestTimeoutException：这表示客户端的请求已超时。如果请求在服务器可以响应之前花费了太长时间，则通常会引发此异常。
+- ConflictException：这表示请求会导致冲突。例如，在尝试创建具有重复唯一标识符的资源时，通常会引发此异常。
+- GoneException：这表示客户端请求的资源不再可用。通常在客户端尝试访问已被删除或过时的资源时引发。
+- PayloadTooLargeException：这表示客户端发送的负载太大，服务器无法处理。例如，当客户端尝试上传超出服务器限制的文件时，通常会引发此异常。
+- UnsupportedMediaTypeException：这表示客户端请求的内容类型不受支持。例如，在使用不支持的媒体类型进行文件上传时，通常会引发此异常。
+- UnprocessableException：这表示由于请求无法处理而导致的错误。它可以用于任何不能归类为其他 HTTP 异常的自定义异常。
+- InternalServerErrorException：这表示服务器内部错误。当服务器遇到未知错误时，通常会引发此异常。
+- NotImplementedException：这表示客户端尝试访问尚未实现的功能。例如，当客户端尝试访问尚未实现的 API 端点时，通常会引发此异常。
+- BadGatewayException：这表示代理或网关无法完成请求。例如，当代理服务器无法从上游服务器获取响应时，通常会引发此异常。
+- ServiceUnavailableException：这表示服务不可用。当服务器无法处理请求时，例如正在进行维护或超载时，通常会引发此异常。
+- GatewayTimeoutException：这表示网关超时。当网关无法在一定时间内从上游服务器获取响应时，通常会引发此异常。
