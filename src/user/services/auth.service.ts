@@ -6,12 +6,13 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { encryptPassword } from 'src/shared/utils/cryptogram.util';
+import { encryptPassword, makeSalt } from 'src/shared/utils/cryptogram.util';
 import { User } from '../entities/user.mongo.entity';
 import { UserInfoDto } from '../dtos/auth.dto';
 import { LoginDTO } from '../dtos/login.dto';
 import { Role } from '../entities/role.mongo.entity';
 import { InjectRedis, Redis } from '@nestjs-modules/ioredis';
+import { CaptchaService } from 'src/shared/captcha/captcha.service';
 
 @Injectable()
 export class AuthService {
@@ -22,6 +23,7 @@ export class AuthService {
     @Inject('ROLE_REPOSITORY')
     private roleRepository: MongoRepository<Role>,
     @InjectRedis() private readonly redis: Redis,
+    private readonly captchaService: CaptchaService,
   ) {}
 
   // 生成token
@@ -137,5 +139,17 @@ export class AuthService {
       throw new NotFoundException('验证码错误');
     }
     return true;
+  }
+  // 获取验证码
+  async getCaptcha() {
+    const { data, text } = await this.captchaService.captche();
+    const id = makeSalt(8);
+    console.log('图片验证码', id, text);
+    await this.redis.set('captche_' + id, text, 'EX', 60);
+    // 拼接图片验证码
+    const image = `data:image/svg+xml;base64,${Buffer.from(data).toString(
+      'base64',
+    )}`;
+    return { id, image };
   }
 }

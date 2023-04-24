@@ -109,4 +109,21 @@ export class AuthController {
   async verifyCode(@Body() body: CheckPhoneCodeDto) {
     return this.authService.verifyCode(body.phone, body.code);
   }
+
+  // 生成验证码图片
+  @ApiOperation({ summary: '生成验证码图片' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: SwaggerBaseApiResponse({}),
+    description: '生成验证码图片成功',
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    type: BaseApiErrorResponse,
+  })
+  @Get('captcha')
+  async captcha(@Req() req: any) {
+    console.log('user信息', req.user);
+    return this.authService.getCaptcha();
+  }
 }
