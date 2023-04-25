@@ -1,6 +1,6 @@
 // import { SuccessVO } from '@/shared/dtos/success.dto';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, Matches, IsString } from 'class-validator';
+import { IsNotEmpty, Matches, IsString, Length } from 'class-validator';
 import { regMobileCN } from 'src/shared/utils/regex.util';
 
 export class RegisterSMSDTO {
@@ -174,5 +174,17 @@ export class CreatePhoneCodeDto {
 export class CheckPhoneCodeDto extends CreatePhoneCodeDto {
   @ApiProperty({ example: '0000' })
   @IsNotEmpty({ message: '请输入验证码' })
+  code: string;
+}
+
+// 校验图像验证码
+export class CheckVerifyCodeDto {
+  @ApiProperty({ example: 'GaBUGhJzESU=' })
+  @IsNotEmpty({ message: '请输入验证码ID' })
+  id: string;
+
+  @ApiProperty({ example: '0000' })
+  @IsNotEmpty({ message: '请输入验证码' })
+  @Length(4, 4, { message: '验证码长度为4位' })
   code: string;
 }

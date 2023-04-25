@@ -118,7 +118,7 @@ export class AuthService {
   }
 
   /**
-   * 校验验证码
+   * 校验手机验证码
    * @param phone
    * @param code
    * @returns
@@ -134,7 +134,7 @@ export class AuthService {
     }
     return true;
   }
-  // 获取验证码
+  // 获取图像验证码
   async getCaptcha() {
     const { data, text } = await this.captchaService.captche();
     const id = makeSalt(8);
@@ -145,5 +145,19 @@ export class AuthService {
       'base64',
     )}`;
     return { id, image };
+  }
+
+  // 校验图像验证码
+  async verifyCaptcha(id: string, code: string) {
+    const redisCode = await this.redis.get('captche_' + id);
+    console.log(redisCode, code);
+    if (!redisCode) {
+      throw new InternalServerErrorException('验证码已过期');
+    }
+    // 转换为小写 不区分大小写
+    if (redisCode.toLowerCase() !== code.toLowerCase()) {
+      throw new InternalServerErrorException('验证码错误');
+    }
+    return true;
   }
 }

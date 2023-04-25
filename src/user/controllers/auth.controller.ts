@@ -23,6 +23,7 @@ import { LoginDTO } from '../dtos/login.dto';
 import { AuthService } from '../services/auth.service';
 import {
   CheckPhoneCodeDto,
+  CheckVerifyCodeDto,
   CreatePhoneCodeDto,
   UserInfoDto,
 } from '../dtos/auth.dto';
@@ -42,7 +43,7 @@ export class AuthController {
     description: '登录成功',
   })
   @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
     type: BaseApiErrorResponse,
   })
   @Public()
@@ -59,7 +60,7 @@ export class AuthController {
     description: '获取用户信息成功',
   })
   @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
     type: BaseApiErrorResponse,
   })
   @ApiBearerAuth()
@@ -86,7 +87,7 @@ export class AuthController {
     description: '根据手机号生成验证码成功',
   })
   @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
     type: BaseApiErrorResponse,
   })
   @Post('generate-code')
@@ -94,7 +95,7 @@ export class AuthController {
     return this.authService.generateCode(body.phone);
   }
 
-  // 校验验证码
+  // 校验手机验证码
   @ApiOperation({ summary: '校验验证码' })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -102,7 +103,7 @@ export class AuthController {
     description: '校验验证码成功',
   })
   @ApiResponse({
-    status: HttpStatus.NOT_FOUND,
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
     type: BaseApiErrorResponse,
   })
   @Post('verify-code')
@@ -125,5 +126,21 @@ export class AuthController {
   async captcha(@Req() req: any) {
     console.log('user信息', req.user);
     return this.authService.getCaptcha();
+  }
+
+  // 校验图像验证码
+  @ApiOperation({ summary: '校验图像验证码' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: SwaggerBaseApiResponse({}),
+    description: '校验图像验证码成功',
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    type: BaseApiErrorResponse,
+  })
+  @Post('verify-captcha')
+  async verifyCaptcha(@Body() { id, code }: CheckVerifyCodeDto) {
+    return this.authService.verifyCaptcha(id, code);
   }
 }
