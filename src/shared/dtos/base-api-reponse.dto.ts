@@ -23,29 +23,14 @@ export function SwaggerBaseApiResponse<T>(type: T): typeof BaseApiResponse {
 }
 
 export class BaseApiErrorObject {
-  @ApiProperty({ type: Number })
-  public statusCode: number;
+  @ApiProperty({ example: 500, description: '错误码' })
+  public code: number;
 
-  @ApiProperty({ type: String })
+  @ApiProperty({ example: false, description: '是否成功' })
+  public success: boolean;
+
+  @ApiProperty({ example: '错误信息', description: '错误信息' })
   public message: string;
-
-  @ApiPropertyOptional({ type: String })
-  public localizedMessage: string;
-
-  @ApiProperty({ type: String })
-  public errorName: string;
-
-  @ApiProperty({ type: Object })
-  public details: unknown;
-
-  @ApiProperty({ type: String })
-  public path: string;
-
-  @ApiProperty({ type: String })
-  public requestId: string;
-
-  @ApiProperty({ type: String })
-  public timestamp: string;
 }
 
 export class BaseApiErrorResponse {
