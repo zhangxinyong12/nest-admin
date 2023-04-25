@@ -3,6 +3,7 @@ import {
   HttpException,
   Inject,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -126,17 +127,10 @@ export class AuthService {
     const redisCode = await this.redis.get(this.getPhone(phone));
     console.log(redisCode, code);
     if (!redisCode) {
-      throw new HttpException(
-        {
-          status: 500,
-          error: '验证码已过期',
-        },
-        500,
-      );
-      throw new NotFoundException('验证码已过期');
+      throw new InternalServerErrorException('验证码已过期');
     }
     if (redisCode !== code) {
-      throw new NotFoundException('验证码错误');
+      throw new InternalServerErrorException('验证码错误');
     }
     return true;
   }

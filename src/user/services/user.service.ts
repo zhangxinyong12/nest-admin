@@ -3,6 +3,7 @@ import {
   HttpStatus,
   Inject,
   Injectable,
+  InternalServerErrorException,
   Query,
 } from '@nestjs/common';
 import { PaginationParamsDto } from 'src/shared/dtos/pagination-params.dto';
@@ -50,7 +51,7 @@ export class UserService {
       },
     });
     if (findData.length) {
-      throw new HttpException('用户名或手机号已存在', HttpStatus.BAD_REQUEST);
+      throw new InternalServerErrorException('用户名或手机号已存在');
     }
     const { salt, hashPassword } = this.getPassword(user.password);
 
@@ -64,10 +65,7 @@ export class UserService {
       })
       .catch((err) => {
         this.logger.error(null, 'create user error222', err);
-        throw new HttpException(
-          '创建用户失败1',
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        ); // 抛出异常
+        throw new InternalServerErrorException(err);
       });
   }
 
@@ -104,7 +102,7 @@ export class UserService {
     console.log(id);
     const findData = await this.userRepository.findOneBy(id);
     if (!findData) {
-      throw new HttpException('用户不存在', HttpStatus.BAD_REQUEST);
+      throw new InternalServerErrorException('用户不存在');
     }
     return findData;
   }
