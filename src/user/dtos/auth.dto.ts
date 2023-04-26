@@ -184,7 +184,7 @@ export class CheckVerifyCodeDto {
   id: string;
 
   @ApiProperty({ example: '0000' })
-  @IsNotEmpty({ message: '请输入验证码' })
   @Length(4, 4, { message: '验证码长度为4位' })
+  @IsNotEmpty({ message: '请输入验证码' })
   code: string;
 }

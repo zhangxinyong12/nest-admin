@@ -1,3 +1,7 @@
+## nestjs 执行顺序
+![图示](./docImg/01.png) 
+## typeorm 数据库相关
+- [CRUD教程资料](https://blog.csdn.net/lxy869718069/article/details/110128030)
 ## mongodb id查询无效
 项目已经锁死mongodb 和typeorm版本号。切勿升级，会有莫名其妙的错误。              
 ## TODO
@@ -582,3 +586,27 @@ declare enum HttpStatus {
 }
 
 ```
+## 装饰器的执行顺序
+假设；
+```
+class CheckVerifyCodeDto {
+  @ApiProperty({ example: 'GaBUGhJzESU=' })
+  @IsNotEmpty({ message: '请输入验证码ID' })
+  id: string;
+
+  @ApiProperty({ example: '0000' })
+  @Length(4, 4, { message: '验证码长度为4位' })
+  @IsNotEmpty({ message: '请输入验证码' })
+  code: string;
+}
+
+```
+在 CheckVerifyCodeDto 中，@Length 装饰器在 @IsNotEmpty 装饰器的右边，它们的执行顺序就是从右到左。 所以，在这个例子中，CheckVerifyCodeDto 的执行顺序为：
+
+1. @Length(4, 4, { message: '验证码长度为4位' })
+2. @IsNotEmpty({ message: '请输入验证码' })
+3. @ApiProperty({ example: 'GaBUGhJzESU=' })
+4. @ApiProperty({ example: '0000' })   
+
+
+也就是说，@Length 先执行，然后是 @IsNotEmpty，再后是 @ApiProperty。
