@@ -1,3 +1,10 @@
+# nestjs学习
+[399买的react全栈课程](https://appwhrkrsz84443.pc.xiaoe-tech.com/p/t_pc/course_pc_detail/big_column/p_6402a238e4b07b0558395e96?product_id=p_6402a238e4b07b0558395e96)        
+[wolai学习笔记文档](https://www.wolai.com/josephxia/vXVPVYLNLHG6GACochkc8Q)   
+[nestjs中文官网](https://docs.nestjs.cn/)         
+[typeorm中文官网](https://typeorm.devjs.cn/)
+[代码参考](https://github.com/su37josephxia/admin-server-nestjs/tree/15)
+[思否上的教程，注意版本已过时，可能有坑](https://segmentfault.com/a/1190000041904772)
 ## nestjs 执行顺序
 ![图示](./docImg/01.png) 
 ## typeorm 数据库相关
@@ -37,12 +44,7 @@
 ```
 
 
-# 学习
-[399买的react全栈课程](https://appwhrkrsz84443.pc.xiaoe-tech.com/p/t_pc/course_pc_detail/big_column/p_6402a238e4b07b0558395e96?product_id=p_6402a238e4b07b0558395e96)        
-[wolai学习笔记文档](https://www.wolai.com/josephxia/vXVPVYLNLHG6GACochkc8Q)   
-[nestjs中文官网](https://docs.nestjs.cn/)         
-[typeorm中文官网](https://typeorm.devjs.cn/)
-[代码参考](https://github.com/su37josephxia/admin-server-nestjs/tree/15)
+
 ## cli 
 nest g    
 Generate a Nest element.    
