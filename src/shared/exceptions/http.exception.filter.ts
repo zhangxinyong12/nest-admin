@@ -32,7 +32,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
       (exception.getResponse() as any).message === 'Unauthorized'
     ) {
       status = 302;
-      message = '登录过期';
+      message = {
+        message: '登录过期',
+      };
     }
 
     // valida的错误信息，只返回一个就行了 当有多个装饰器应用在同一个属性或方法上时，它们的执行顺序是从右到左的
@@ -58,7 +60,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     });
 
     return response.status(200).send({
-      code: status,
+      status: status,
       success: false,
       message: message.message || message.error || '服务器错误',
     });

@@ -12,6 +12,7 @@ import {
   Get,
   Req,
   UseGuards,
+  HttpCode,
 } from '@nestjs/common';
 import {
   BaseApiErrorResponse,
@@ -47,6 +48,7 @@ export class AuthController {
     type: BaseApiErrorResponse,
   })
   @Public()
+  @HttpCode(200)
   @Post('login')
   async login(@Body() loginDTO: LoginDTO) {
     return this.authService.login(loginDTO);

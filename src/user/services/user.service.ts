@@ -70,9 +70,9 @@ export class UserService {
   }
 
   // 模糊查询 分页接口
-  async findAll({ page, pageSize, params }: PaginationParamsDto) {
+  async findAll({ page, pageSize, params = {} }: PaginationParamsDto) {
     const { name, phone, email } = params;
-
+    console.log(params);
     const query: MongoFindManyOptions<User> = {
       order: {
         updatedAt: 'DESC',
@@ -91,7 +91,7 @@ export class UserService {
     console.log('query', query);
     const [data, count] = await this.userRepository.findAndCount(query);
     return {
-      item: data,
+      items: data,
       pageSize,
       page,
       total: count,
