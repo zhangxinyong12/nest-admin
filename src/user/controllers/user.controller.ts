@@ -93,6 +93,8 @@ export class UserController {
   @ApiTags('删除所有用户')
   @Delete()
   removeAll() {
+    // 不调用，直接返回true。
+    return true;
     return this.userService.removeAll();
   }
 
