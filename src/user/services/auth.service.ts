@@ -9,11 +9,12 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { encryptPassword, makeSalt } from 'src/shared/utils/cryptogram.util';
 import { User } from '../entities/user.mongo.entity';
-import { UserInfoDto } from '../dtos/auth.dto';
+import { registerBySMSDto, registerDto, UserInfoDto } from '../dtos/auth.dto';
 import { LoginDTO } from '../dtos/login.dto';
 import { Role } from '../entities/role.mongo.entity';
 import { InjectRedis, Redis } from '@nestjs-modules/ioredis';
 import { CaptchaService } from 'src/shared/captcha/captcha.service';
+import { UserService } from './user.service';
 
 @Injectable()
 export class AuthService {
@@ -25,10 +26,12 @@ export class AuthService {
     private roleRepository: MongoRepository<Role>,
     @InjectRedis() private readonly redis: Redis,
     private readonly captchaService: CaptchaService,
+    private readonly userService: UserService,
   ) {}
 
   // 生成token
   async createToken(user: User) {
+    console.log('user id', user);
     const payload = { id: user.id };
     console.log(1111111, payload);
     const token = this.jwtService.sign(payload);
@@ -56,22 +59,28 @@ export class AuthService {
 
     return user;
   }
-
-  async login(loginDTO: LoginDTO) {
-    const user = await this.checkLoginForm(loginDTO);
-    const token = await this.createToken(user);
-    // 保存用户信息到redis 过期时间30d
+  // 保存用户信息到redis 过期时间30d
+  async saveUserInfoToRedis(user: User) {
     await this.redis.set(
       `login_user_${user.id}`,
       JSON.stringify(user),
       'EX',
       60 * 60 * 24 * 30,
     );
+  }
+
+  // 登录
+  async login(loginDTO: LoginDTO) {
+    const user = await this.checkLoginForm(loginDTO);
+    const token = await this.createToken(user);
+    // 保存用户信息到redis 过期时间30d
+    await this.saveUserInfoToRedis(user);
     return {
       token,
     };
   }
 
+  // 获取用户信息
   async info(id: string) {
     console.log('iddddddddd', id);
     // 查询用户并获取权限
@@ -136,7 +145,7 @@ export class AuthService {
     if (!redisCode) {
       throw new InternalServerErrorException('验证码已过期');
     }
-    if (redisCode !== code) {
+    if (redisCode != code) {
       throw new InternalServerErrorException('验证码错误');
     }
     return true;
@@ -166,5 +175,47 @@ export class AuthService {
       throw new InternalServerErrorException('验证码错误');
     }
     return true;
+  }
+
+  // 校验手机验证码并注册用户，登录用户
+  async registerBySMS({ phone, code }: registerBySMSDto) {
+    // 校验手机验证码
+    await this.verifyCode(phone, code);
+    return this.register(phone, phone, phone);
+  }
+
+  async registerByphoneAndName({ phone, name, password }: registerDto) {
+    return this.register(phone, name, password);
+  }
+
+  // 手机号 用户名 密码注册
+  async register(phone, name, password) {
+    // 查询用户是否存在
+    const user = await this.userRepository.findOneBy({ phone });
+    if (user) {
+      throw new InternalServerErrorException('用户已存在');
+    }
+    // 创建用户
+    const newUser = await this.userService.create({
+      phone,
+      password,
+      name,
+      email: '',
+      avatar: '',
+      job: '',
+      jobName: '',
+      organization: '',
+      location: '',
+      personalWebsite: '',
+    });
+    console.log('创建newUser', newUser);
+
+    // 生成token
+    const token = await this.createToken(newUser);
+    // 保存用户信息到redis 过期时间30d
+    await this.saveUserInfoToRedis(newUser);
+    return {
+      token,
+    };
   }
 }

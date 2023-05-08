@@ -26,6 +26,8 @@ import {
   CheckPhoneCodeDto,
   CheckVerifyCodeDto,
   CreatePhoneCodeDto,
+  registerBySMSDto,
+  registerDto,
   UserInfoDto,
 } from '../dtos/auth.dto';
 
@@ -92,6 +94,7 @@ export class AuthController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     type: BaseApiErrorResponse,
   })
+  @Public()
   @Post('generate-code')
   async generateCode(@Body() body: CreatePhoneCodeDto) {
     return this.authService.generateCode(body.phone);
@@ -108,6 +111,7 @@ export class AuthController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     type: BaseApiErrorResponse,
   })
+  @Public()
   @Post('verify-code')
   async verifyCode(@Body() body: CheckPhoneCodeDto) {
     return this.authService.verifyCode(body.phone, body.code);
@@ -124,6 +128,7 @@ export class AuthController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     type: BaseApiErrorResponse,
   })
+  @Public()
   @Get('captcha')
   async captcha(@Req() req: any) {
     console.log('user信息', req.user);
@@ -141,8 +146,43 @@ export class AuthController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     type: BaseApiErrorResponse,
   })
+  @Public()
   @Post('verify-captcha')
   async verifyCaptcha(@Body() { id, code }: CheckVerifyCodeDto) {
     return this.authService.verifyCaptcha(id, code);
+  }
+
+  // 使用手机号注册并登录
+  @ApiOperation({ summary: '使用手机号注册并登录' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: SwaggerBaseApiResponse({}),
+    description: '使用手机号注册并登录成功',
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    type: BaseApiErrorResponse,
+  })
+  @Public()
+  @Post('registerBySMS')
+  async registerBySMS(@Body() body: registerBySMSDto) {
+    return this.authService.registerBySMS(body);
+  }
+
+  // 注册用户
+  @ApiOperation({ summary: '注册用户' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: SwaggerBaseApiResponse({}),
+    description: '注册用户成功',
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    type: BaseApiErrorResponse,
+  })
+  @Public()
+  @Post('')
+  async register(@Body() body: registerDto) {
+    return this.authService.registerByphoneAndName(body);
   }
 }

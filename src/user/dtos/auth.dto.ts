@@ -188,3 +188,28 @@ export class CheckVerifyCodeDto {
   @IsNotEmpty({ message: '请输入验证码' })
   code: string;
 }
+
+export class registerBySMSDto {
+  @ApiProperty({ example: '13271150671' })
+  @IsNotEmpty({ message: '请输入手机号' })
+  phone: string;
+
+  @ApiProperty({ example: '0000' })
+  @IsNotEmpty({ message: '请输入验证码' })
+  code: string;
+}
+
+// 手机号 用户名 密码 注册
+export class registerDto {
+  @ApiProperty({ example: '13271150671' })
+  @IsNotEmpty({ message: '请输入手机号' })
+  phone: string;
+
+  @ApiProperty({ example: 'zhangxinyong' })
+  @IsNotEmpty({ message: '请输入用户名' })
+  name: string;
+
+  @ApiProperty({ example: '132fdfw' })
+  @IsNotEmpty({ message: '请输入密码' })
+  password: string;
+}
