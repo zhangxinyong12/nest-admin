@@ -1,3 +1,4 @@
+import { RedisModule } from '@nestjs-modules/ioredis';
 import { Module } from '@nestjs/common';
 import { ConfigService, ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
@@ -19,6 +20,13 @@ const CreateJwtModule = JwtModule.registerAsync({
     ConfigModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     CreateJwtModule,
+    RedisModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        config: configService.get('redis'),
+      }),
+    }),
   ],
   controllers: [],
   providers: [

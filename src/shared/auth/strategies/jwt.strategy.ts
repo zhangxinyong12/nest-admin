@@ -3,10 +3,11 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { InjectRedis, Redis } from '@nestjs-modules/ioredis';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor() {
+  constructor(@InjectRedis() private readonly redis: Redis) {
     super({
       // 从请求头中获取token 从Authorization头中获取token，请求头要拼接为 Bearer <token>的格式.
       // Authorization: bearer JSON_WEB_TOKEN_STRING.....
@@ -21,15 +22,26 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
-    console.log('jwt', payload);
+    console.log('校验jwt', payload);
     // 如果 token 已经过期，抛出异常
-    // TODO 调整了一下目录结构，结果不走这个方法了，不知道为什么
     if (payload.exp < Date.now() / 1000) {
-      console.log('99999999999 Token 已过期');
       throw new UnauthorizedException('Token 已过期');
     }
+    // 判断用户是否登录
+    const isLogin = await this.isLogin(payload.id);
+    if (!isLogin) {
+      throw new UnauthorizedException('用户未登录或者Token已过期');
+    }
+
     return {
       id: payload.id,
     };
+  }
+
+  // 查询redis数据库，验证用户是否登陆
+  async isLogin(id: string) {
+    const user = await this.redis.get(`login_user_${id}`);
+    console.log('user', user);
+    return user;
   }
 }

@@ -60,6 +60,13 @@ export class AuthService {
   async login(loginDTO: LoginDTO) {
     const user = await this.checkLoginForm(loginDTO);
     const token = await this.createToken(user);
+    // 保存用户信息到redis 过期时间30d
+    await this.redis.set(
+      `login_user_${user.id}`,
+      JSON.stringify(user),
+      'EX',
+      60 * 60 * 24 * 30,
+    );
     return {
       token,
     };
