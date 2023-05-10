@@ -2,7 +2,6 @@
 可以用我的数据库，大哥们，别删库啊          
 [nestjs中文官网](https://docs.nestjs.cn/)         
 [typeorm中文官网](https://typeorm.devjs.cn/)
-[代码参考](https://github.com/su37josephxia/admin-server-nestjs/tree/15)
 [思否上的教程，注意版本已过时，可能有坑](https://segmentfault.com/a/1190000041904772)
 ## nestjs 执行顺序
 ![图示](./docImg/01.png) 
