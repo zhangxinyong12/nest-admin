@@ -1,18 +1,31 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
+import { MongoRepository, Repository } from 'typeorm';
 import { CreateArticleDto } from '../dto/create-article.dto';
 import { UpdateArticleDto } from '../dto/update-article.dto';
+
 import { Article } from '../entities/article.mongo.entity';
 
 @Injectable()
 export class ArticleService {
   constructor(
     @Inject('ARTICLE_REPOSITORY')
-    private readonly articleRepository: Repository<Article>,
+    private readonly articleRepository: MongoRepository<Article>,
   ) {}
 
   // 创建文章
-  create(createArticleDto: CreateArticleDto) {
+  async create(createArticleDto: CreateArticleDto) {
+    // 文章title 不能重复
+    const { title } = createArticleDto;
+    const article = await this.articleRepository.findOneBy({
+      title,
+    });
+    if (article) {
+      throw new InternalServerErrorException('文章标题不能重复');
+    }
     return this.articleRepository.save(createArticleDto);
   }
 
@@ -30,7 +43,7 @@ export class ArticleService {
   // 查询单个文章
   findOne(id: string) {
     console.log('文章id', id);
-    return this.articleRepository.findOneBy(id as any);
+    return this.articleRepository.findOneBy(id);
   }
 
   // 更新文章
