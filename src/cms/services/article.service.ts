@@ -53,7 +53,8 @@ export class ArticleService {
   // 更新文章
   async update(id: string, updateArticleDto: UpdateArticleDto) {
     await this.findOne(id);
-    return this.articleRepository.update(id, updateArticleDto);
+    await this.articleRepository.update(id, updateArticleDto);
+    return this.findOne(id);
   }
 
   // 删除文章
