@@ -1,7 +1,7 @@
 import { Article } from './entities/article.mongo.entity';
 import { Menu } from './entities/menu.mongo.entity';
 
-export const ArticleProviders = [
+export const CMSProviders = [
   {
     provide: 'ARTICLE_REPOSITORY',
     useFactory: async (AppDataSource) =>
