@@ -41,18 +41,24 @@ export class ArticleService {
   }
 
   // 查询单个文章
-  findOne(id: string) {
+  async findOne(id: string) {
     console.log('文章id', id);
-    return this.articleRepository.findOneBy(id);
+    const data = await this.articleRepository.findOneBy(id);
+    if (!data) {
+      throw new InternalServerErrorException('文章不存在');
+    }
+    return data;
   }
 
   // 更新文章
-  update(id: string, updateArticleDto: UpdateArticleDto) {
+  async update(id: string, updateArticleDto: UpdateArticleDto) {
+    await this.findOne(id);
     return this.articleRepository.update(id, updateArticleDto);
   }
 
   // 删除文章
-  remove(id: string) {
+  async remove(id: string) {
+    await this.findOne(id);
     return this.articleRepository.delete(id);
   }
 }
