@@ -3,3 +3,7 @@
 [wolai学习笔记文档](https://www.wolai.com/josephxia/vXVPVYLNLHG6GACochkc8Q)   
 [代码参考](https://github.com/su37josephxia/admin-server-nestjs/tree/15)
 
+## mongodb 记录
+- admin adminZHang
+### zhang 数据库 学习nest使用的
+zhang ZHang123
