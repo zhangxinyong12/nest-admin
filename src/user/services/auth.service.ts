@@ -32,9 +32,7 @@ export class AuthService {
   // 生成token
   async createToken(user: User) {
     console.log('user id', user);
-    const payload = { id: user.id };
-    console.log(1111111, payload);
-    const token = this.jwtService.sign(payload);
+    const token = this.jwtService.sign(user);
     return token;
   }
 
@@ -57,7 +55,7 @@ export class AuthService {
       throw new NotFoundException('密码错误');
     }
 
-    return user;
+    return this.info(user.id as unknown as string);
   }
   // 保存用户信息到redis 过期时间30d
   async saveUserInfoToRedis(user: User) {

@@ -11,6 +11,7 @@ import {
   Req,
   UploadedFile,
   UseInterceptors,
+  UseGuards,
 } from '@nestjs/common';
 
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -29,7 +30,8 @@ import { PaginationParamsDto } from 'src/shared/dtos/pagination-params.dto';
 import { UploadDTO } from '../dtos/upload.dto';
 import { getFileHash } from 'src/shared/utils/cryptogram.util';
 import { Public } from 'src/shared/auth/decorator/auth.decorator';
-
+import { JwtAuthGuard } from 'src/shared/auth/guard/jwt-auth.guard';
+import { Permissions } from 'src/shared/auth/decorator/permissions.decorator';
 // @ApiTags('用户')
 @Controller('user')
 export class UserController {
@@ -69,6 +71,25 @@ export class UserController {
     return this.userService.findAll(body);
   }
 
+  @ApiTags('测试权限')
+  @Permissions('write')
+  @Get('admin')
+  isAdmin(@Body() body: any) {
+    console.log(111111111);
+    return {
+      data: 'admin 权限',
+    };
+  }
+
+  @Get('read')
+  read() {
+    console.log(111111111);
+    return {
+      data: 'read 权限',
+    };
+  }
+
+  // 注意顺序。这个要放到最后，否则会拦截上面的路由，造成报错
   @ApiTags('获取单个用户')
   @Get(':id')
   findOne(@Param('id') id: string) {

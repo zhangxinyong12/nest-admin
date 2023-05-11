@@ -56,6 +56,6 @@ export class CreateUserDto {
   @IsNotEmpty()
   personalWebsite: string;
 
-  @ApiProperty({ example: '1' })
+  @ApiProperty({ example: 'role id, admin：管理员权限，user；用户权限' })
   role?;
 }

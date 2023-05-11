@@ -72,10 +72,6 @@ export class AuthController {
   @Get('info')
   // Authorization: bearer JSON_WEB_TOKEN_STRING.....
   async info(@Req() req: any) {
-    console.log(
-      'req.userreq.userreq.userreq.userreq.userreq.userreq.user',
-      req.user,
-    );
     const data = await this.authService.info(req.user.id);
     console.log(data);
     // delete data.password;
