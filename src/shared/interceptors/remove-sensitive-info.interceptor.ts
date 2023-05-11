@@ -21,7 +21,6 @@ export class RemoveSensitiveInfoInterceptor implements NestInterceptor {
     // console.log(`Controller: ${context.getClass().name}`); // 输出
     // console.log(`Method: ${context.getHandler().name}`);
     const request = context.switchToHttp().getRequest();
-    console.log(this.removeKeys);
 
     return next.handle().pipe(
       map((res) => {

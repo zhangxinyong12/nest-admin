@@ -4,6 +4,8 @@ import { ConfigService, ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
+import { UserProviders } from 'src/user/user.providers';
+import { DatabaseProviders } from '../database.providers';
 import { JwtAuthGuard } from './guard/jwt-auth.guard';
 import { JwtStrategy } from './strategies/jwt.strategy';
 
@@ -30,6 +32,8 @@ const CreateJwtModule = JwtModule.registerAsync({
   ],
   controllers: [],
   providers: [
+    ...DatabaseProviders,
+    ...UserProviders,
     JwtStrategy,
     {
       provide: APP_GUARD,
