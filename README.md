@@ -1,5 +1,6 @@
 # nestjs学习
-可以用我的数据库，大哥们，别删库啊          
+~~可以用我的数据库，大哥们，别删库啊~~   
+现在好了，开启用户名 密码认证就没事了。     
 [nestjs中文官网](https://docs.nestjs.cn/)         
 [typeorm中文官网](https://typeorm.devjs.cn/)
 [思否上的教程，注意版本已过时，可能有坑](https://segmentfault.com/a/1190000041904772)
