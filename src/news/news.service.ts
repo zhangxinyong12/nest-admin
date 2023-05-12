@@ -28,16 +28,20 @@ export class NewsService {
     page: number;
     pageSize: number;
   }> {
+    // query 模糊查询
+    const query = params
+      ? { title: { $regex: params.title, $options: 'i' } }
+      : {};
+
     // 获取总条数
-    const total = await this.newsModel.countDocuments(params);
+    const total = await this.newsModel.countDocuments(query);
 
     // 计算出跳过的记录数和返回的记录数
     const skip = (page - 1) * pageSize;
     const limit = pageSize;
-
     // 查询数据
     const data = await this.newsModel
-      .find(params)
+      .find(query)
       .skip(skip)
       .limit(limit)
       .exec();
