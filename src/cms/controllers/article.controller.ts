@@ -17,6 +17,7 @@ import {
   BaseApiErrorResponse,
   SwaggerBaseApiResponse,
 } from 'src/shared/dtos/base-api-reponse.dto';
+import { Public } from 'src/shared/auth/decorator/auth.decorator';
 @ApiTags('文章管理')
 @Controller('article')
 export class ArticleController {
@@ -96,5 +97,14 @@ export class ArticleController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.articleService.remove(id);
+  }
+
+  // 伪代码 用于演示 更新文章
+  @ApiOperation({ summary: '伪代码 用于演示 更新文章' })
+  @Public()
+  @Get('update/:id')
+  async updateArticle(@Param('id') id: string) {
+    console.log('id', id);
+    return `文章${id}更新成功`;
   }
 }

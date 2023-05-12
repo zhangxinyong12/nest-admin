@@ -1,3 +1,4 @@
+import { HttpService } from '@nestjs/axios';
 import {
   Inject,
   Injectable,
@@ -8,12 +9,16 @@ import { CreateArticleDto } from '../dto/create-article.dto';
 import { UpdateArticleDto } from '../dto/update-article.dto';
 
 import { Article } from '../entities/article.mongo.entity';
+import { ConfigService } from '@nestjs/config';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class ArticleService {
   constructor(
     @Inject('ARTICLE_REPOSITORY')
     private readonly articleRepository: MongoRepository<Article>,
+    private readonly httpService: HttpService,
+    private readonly configService: ConfigService,
   ) {}
 
   // 创建文章
@@ -52,14 +57,30 @@ export class ArticleService {
 
   // 更新文章
   async update(id: string, updateArticleDto: UpdateArticleDto) {
+    console.log('更新文章', id, updateArticleDto);
     await this.findOne(id);
     await this.articleRepository.update(id, updateArticleDto);
-    return this.findOne(id);
+    await this.findOne(id);
+    return this.syncNextArticle(id);
   }
 
   // 删除文章
   async remove(id: string) {
     await this.findOne(id);
     return this.articleRepository.delete(id);
+  }
+
+  // 同步更新next的文章 通过http请求 next的接口 /api/revalidate 传入文章id 和 secret token
+  async syncNextArticle(id: string) {
+    console.log('同步next文章', id);
+    const url =
+      this.configService.get('NEXT_HOST') +
+      `article/update/${id}?secret=` +
+      this.configService.get('NEST_VALIDATE_TOKEN');
+    // const url = `api/revalidate?secret=${secret}&id=${id}`
+    console.log('url', url);
+    const { data } = await firstValueFrom(this.httpService.get(url));
+    console.log('同步next文章', data);
+    return data;
   }
 }
