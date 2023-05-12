@@ -9,6 +9,7 @@ specifiers:
   '@nestjs/core': ^9.0.0
   '@nestjs/jwt': ^10.0.3
   '@nestjs/mapped-types': ^1.2.2
+  '@nestjs/mongoose': ^9.2.2
   '@nestjs/passport': ^9.0.3
   '@nestjs/platform-express': ^9.4.0
   '@nestjs/schematics': ^9.0.0
@@ -32,7 +33,7 @@ specifiers:
   fs-extra: ^11.1.1
   jest: 28.1.2
   mongodb: 3.7.3
-  mongoose: ^7.0.4
+  mongoose: ^7.1.1
   mysql2: ^3.2.3
   passport: ^0.6.0
   passport-jwt: ^4.0.1
@@ -60,6 +61,7 @@ dependencies:
   '@nestjs/core': 9.4.0_s52inwjga72fw7w7ilq4rk5hru
   '@nestjs/jwt': 10.0.3_@nestjs+common@9.4.0
   '@nestjs/mapped-types': 1.2.2_jbpjjfk2f2t4q57zuyaqjyvrsi
+  '@nestjs/mongoose': 9.2.2_g6rxkqcwlfjdbfl3upzjueqtii
   '@nestjs/passport': 9.0.3_xygznos57mh4mi6h22se6rwjhq
   '@nestjs/platform-express': 9.4.0_gqkob5jndcfeb3wjw72wbdwyne
   '@nestjs/swagger': 6.3.0_wgmggry273v4dignukmrfwr7na
@@ -1059,6 +1061,22 @@ packages:
       class-transformer: 0.5.1
       class-validator: 0.14.0
       reflect-metadata: 0.1.13
+    dev: false
+
+  /@nestjs/mongoose/9.2.2_g6rxkqcwlfjdbfl3upzjueqtii:
+    resolution: {integrity: sha512-szNuSUCwwbQSSeiTh8+tZ9fHV4nuzHwBDROb0hX0s7crwY15TunCfwyKbB2XjqkEQWUAasDeCBuKOJSL9N6tTg==}
+    peerDependencies:
+      '@nestjs/common': ^8.0.0 || ^9.0.0
+      '@nestjs/core': ^8.0.0 || ^9.0.0
+      mongoose: ^6.0.2 || ^7.0.0
+      reflect-metadata: ^0.1.12
+      rxjs: ^7.0.0
+    dependencies:
+      '@nestjs/common': 9.4.0_j3td4gnlgk75ora6o6suo62byy
+      '@nestjs/core': 9.4.0_s52inwjga72fw7w7ilq4rk5hru
+      mongoose: 7.1.1
+      reflect-metadata: 0.1.13
+      rxjs: 7.8.1
     dev: false
 
   /@nestjs/passport/9.0.3_xygznos57mh4mi6h22se6rwjhq:
