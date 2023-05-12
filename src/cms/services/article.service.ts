@@ -1,4 +1,3 @@
-import { HttpService } from '@nestjs/axios';
 import {
   Inject,
   Injectable,
@@ -11,6 +10,7 @@ import { UpdateArticleDto } from '../dto/update-article.dto';
 import { Article } from '../entities/article.mongo.entity';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
+import { HttpService } from '@nestjs/axios';
 
 @Injectable()
 export class ArticleService {

@@ -1,4 +1,9 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import {
+  LoggerService,
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+} from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configModuleOptions } from './configs/module-options';
 import { DatabaseProviders } from './database.providers';
@@ -7,6 +12,8 @@ import { UploadService } from './upload/upload.service';
 import { AuthModule } from './auth/auth.module';
 import { CaptchaService } from './captcha/captcha.service';
 import { HttpModule } from '@nestjs/axios';
+import { AppLogger } from './logger/logger.service';
+import { HttpConfigModule } from './httpInterceptor/http.config.module';
 
 @Module({
   // 导入其他模块 依赖
@@ -14,11 +21,7 @@ import { HttpModule } from '@nestjs/axios';
     AppLoggerModule,
     ConfigModule.forRoot(configModuleOptions),
     AuthModule,
-    HttpModule.register({
-      // axios 配置
-      // timeout: 5000,
-      // maxRedirects: 5,
-    }),
+    HttpConfigModule,
   ],
 
   // 暴露出去 供其他模块使用
@@ -29,7 +32,7 @@ import { HttpModule } from '@nestjs/axios';
     UploadService,
     AuthModule,
     CaptchaService,
-    HttpModule,
+    HttpConfigModule,
   ],
   // 本模块内部提供的服务 供本模块内部使用
   providers: [...DatabaseProviders, UploadService, CaptchaService],
