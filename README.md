@@ -8,6 +8,8 @@
 ![图示](./docImg/01.png) 
 ## typeorm 数据库相关
 - [CRUD教程资料](https://blog.csdn.net/lxy869718069/article/details/110128030)
+## mongoose 
+mongodb数据库不使用typeorm了。使用[mongoose](https://docs.mongoing.com/)
 ## mongodb id查询无效
 项目已经锁死mongodb 和typeorm版本号。切勿升级，会有莫名其妙的错误。              
 ## TODO
