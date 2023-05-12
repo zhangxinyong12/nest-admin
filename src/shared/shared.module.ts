@@ -6,16 +6,22 @@ import { AppLoggerModule } from './logger/logger.module';
 import { UploadService } from './upload/upload.service';
 import { AuthModule } from './auth/auth.module';
 import { CaptchaService } from './captcha/captcha.service';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
-  // 注入Config
+  // 导入其他模块 依赖
   imports: [
     AppLoggerModule,
     ConfigModule.forRoot(configModuleOptions),
     AuthModule,
+    HttpModule.register({
+      // axios 配置
+      // timeout: 5000,
+      // maxRedirects: 5,
+    }),
   ],
 
-  // 暴露Config
+  // 暴露出去 供其他模块使用
   exports: [
     ConfigModule,
     AppLoggerModule,
@@ -23,7 +29,9 @@ import { CaptchaService } from './captcha/captcha.service';
     UploadService,
     AuthModule,
     CaptchaService,
+    HttpModule,
   ],
+  // 本模块内部提供的服务 供本模块内部使用
   providers: [...DatabaseProviders, UploadService, CaptchaService],
 })
 export class SharedModule {}

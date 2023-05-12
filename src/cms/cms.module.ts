@@ -8,14 +8,7 @@ import { MenuService } from './services/menu.service';
 import { HttpModule } from '@nestjs/axios';
 
 @Module({
-  imports: [
-    SharedModule,
-    HttpModule.register({
-      // axios 配置
-      // timeout: 5000,
-      // maxRedirects: 5,
-    }),
-  ],
+  imports: [SharedModule],
   controllers: [ArticleController, MenuController],
   providers: [ArticleService, MenuService, ...CMSProviders],
 })
