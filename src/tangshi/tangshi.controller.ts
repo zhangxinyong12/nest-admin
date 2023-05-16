@@ -23,7 +23,6 @@ export class TangshiController {
 
   @Get()
   findAll(@Body() body: PaginationParamsDto) {
-    console.log(body);
     return this.tangshiService.findAll(body);
   }
 

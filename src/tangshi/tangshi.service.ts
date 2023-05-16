@@ -49,13 +49,12 @@ export class TangshiService {
     pageSize: number;
   }> {
     // query 模糊查询
-    const query = params
-      ? {
-          title: { $regex: params?.title, $options: 'i' },
-          auth: { $regex: params?.auth, $options: 'i' },
-          content: { $regex: params?.content, $options: 'i' },
-        }
-      : {};
+    const query = {};
+    params?.title &&
+      (query['title'] = { $regex: params?.title, $options: 'i' });
+    params?.auth && (query['auth'] = { $regex: params?.auth, $options: 'i' });
+    params?.content &&
+      (query['content'] = { $regex: params?.content, $options: 'i' });
 
     // 获取总条数
     const total = await this.tangshiModel.countDocuments(query);
