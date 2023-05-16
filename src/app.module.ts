@@ -6,9 +6,17 @@ import { CatModule } from './cat/cat.module';
 import { SharedModule } from 'src/shared/shared.module';
 import { CMSModule } from './cms/cms.module';
 import { NewsModule } from './news/news.module';
+import { TangshiModule } from './tangshi/tangshi.module';
 
 @Module({
-  imports: [SharedModule, UserModule, CatModule, CMSModule, NewsModule],
+  imports: [
+    SharedModule,
+    UserModule,
+    CatModule,
+    CMSModule,
+    NewsModule,
+    TangshiModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

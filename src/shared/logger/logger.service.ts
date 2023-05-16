@@ -22,7 +22,7 @@ export class AppLogger {
         format.prettyPrint(),
       ),
       transports: [
-        // new transports.Console(), // TODO 打印大量日志会阻塞
+        new transports.Console(), // TODO 打印大量日志会阻塞
         new transports.File({
           filename: 'logs/error.log',
           level: 'error',

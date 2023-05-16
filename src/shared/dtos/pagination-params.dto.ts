@@ -34,7 +34,7 @@ export class PaginationParamsDto {
   @IsOptional()
   @Min(0)
   @Transform(({ value }) => parseInt(value, 10), { toClassOnly: true })
-  pageSize = 5;
+  pageSize?: number;
 
   @ApiPropertyOptional({
     description: 'Page, defaults to 0',
@@ -45,7 +45,7 @@ export class PaginationParamsDto {
   @IsOptional()
   @Min(0)
   @Transform(({ value }) => parseInt(value, 10), { toClassOnly: true })
-  page = 1;
+  page?: number;
 
   @ApiPropertyOptional({
     description: '分页的查询参数',
@@ -53,5 +53,5 @@ export class PaginationParamsDto {
     example: {},
     required: false,
   })
-  params: { [key: string]: any };
+  params?: { [key: string]: any };
 }
