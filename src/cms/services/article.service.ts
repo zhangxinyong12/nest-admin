@@ -11,6 +11,7 @@ import { Article } from '../entities/article.mongo.entity';
 import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
+import { spawn } from 'child_process';
 
 @Injectable()
 export class ArticleService {
@@ -47,7 +48,6 @@ export class ArticleService {
 
   // 查询单个文章
   async findOne(id: string) {
-    console.log('文章id', id);
     const data = await this.articleRepository.findOneBy(id);
     if (!data) {
       throw new InternalServerErrorException('文章不存在');
@@ -82,5 +82,22 @@ export class ArticleService {
     const { data } = await firstValueFrom(this.httpService.get(url));
     console.log('同步next文章', data);
     return data;
+  }
+
+  // 测试spawn
+  async spawn(command: string, ...args) {
+    return new Promise((resolve, reject) => {
+      console.log('spawn', command, args);
+      const proc = spawn(command, ...args);
+      proc.stdout.pipe(process.stdout);
+      proc.stderr.pipe(process.stderr);
+      let ret = '';
+      proc.stdout.on('data', (data) => {
+        ret += data.toString();
+      });
+      proc.on('close', () => {
+        resolve(ret);
+      });
+    });
   }
 }

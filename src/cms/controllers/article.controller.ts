@@ -54,6 +54,12 @@ export class ArticleController {
     return this.articleService.findAll();
   }
 
+  @ApiOperation({ summary: '测试nestjs调用子进程' })
+  @Get('spawn')
+  async spawn() {
+    return this.articleService.spawn('ls', ['-l'], { cwd: './' });
+  }
+
   @ApiOperation({ summary: '查询单个文章' })
   @ApiResponse({
     status: HttpStatus.OK,
