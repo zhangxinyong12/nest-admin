@@ -2,6 +2,7 @@ import {
   Inject,
   Injectable,
   InternalServerErrorException,
+  OnModuleInit,
 } from '@nestjs/common';
 import { MongoRepository, Repository } from 'typeorm';
 import { CreateArticleDto } from '../dto/create-article.dto';
@@ -12,15 +13,22 @@ import { ConfigService } from '@nestjs/config';
 import { firstValueFrom } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
 import { spawn } from 'child_process';
-
+import * as backup from 'mongodb-backup';
+import { Cron } from '@nestjs/schedule';
 @Injectable()
-export class ArticleService {
+export class ArticleService implements OnModuleInit {
   constructor(
     @Inject('ARTICLE_REPOSITORY')
     private readonly articleRepository: MongoRepository<Article>,
     private readonly httpService: HttpService,
     private readonly configService: ConfigService,
   ) {}
+
+  // 服务初始化时执行
+  onModuleInit() {
+    console.log('ArticleService init');
+    // this.handleCron(); // 初始化执行
+  }
 
   // 创建文章
   async create(createArticleDto: CreateArticleDto) {
@@ -99,5 +107,45 @@ export class ArticleService {
         resolve(ret);
       });
     });
+  }
+
+  /**
+   * @name  备份mongodb数据库
+   * @description
+   *  如果您使用 MongoDB 的默认备份工具 mongodump 进行了数据库备份，那么可以按照以下步骤恢复数据：
+      将备份文件传输到要进行恢复的 MongoDB 服务器上。
+      在备份文件所在的目录下打开终端或命令提示符窗口。
+      运行以下 mongorestore 命令来进行恢复操作：
+
+      mongorestore --archive=<backup-file> --nsInclude=<database>.<collection>
+      
+      其中，<backup-file> 是备份文件的名称，<database> 和 <collection> 分别是要恢复的数据库和集合名称。如果要恢复整个数据库，则将 --nsInclude 参数省略即可。
+      等待恢复过程完成，检查数据是否已经成功恢复。
+      以上就是使用 mongodump 和 mongorestore 工具进行 MongoDB 数据库备份和恢复的基本步骤。
+   */
+  async backupDatabase() {
+    const uri = this.configService.get('database')['mongodb']['url'];
+    const options = {
+      uri,
+      root: './backup', // 备份文件存放目录
+    };
+
+    await backup(options);
+  }
+
+  // 每10秒执行一下
+  // * * * * * *
+  // | | | | | |
+  // | | | | | day of week
+  // | | | | month
+  // | | | day of month
+  // | | hour
+  // | minute
+  // second (optional)
+  @Cron('*/10 * * * * *')
+  // @Cron('0 0 * * *') // 每天凌晨 0 点执行一次
+  async handleCron() {
+    // console.log('每天凌晨 0 点执行一次');
+    console.log('定时任务 每10秒执行一次');
   }
 }

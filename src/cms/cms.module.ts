@@ -6,9 +6,10 @@ import { ArticleService } from './services/article.service';
 import { MenuController } from './controllers/menu.controller';
 import { MenuService } from './services/menu.service';
 import { HttpModule } from '@nestjs/axios';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
-  imports: [SharedModule],
+  imports: [SharedModule, ScheduleModule.forRoot()],
   controllers: [ArticleController, MenuController],
   providers: [ArticleService, MenuService, ...CMSProviders],
 })

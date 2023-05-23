@@ -60,6 +60,15 @@ export class ArticleController {
     return this.articleService.spawn('ls', ['-l'], { cwd: './' });
   }
 
+  // 备份mongodb数据
+  @ApiOperation({ summary: '备份mongodb数据' })
+  @Public()
+  @Get('backup')
+  async backup() {
+    await this.articleService.backupDatabase();
+    return '备份成功';
+  }
+
   @ApiOperation({ summary: '查询单个文章' })
   @ApiResponse({
     status: HttpStatus.OK,
