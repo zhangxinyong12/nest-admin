@@ -8,6 +8,7 @@ import {
   Delete,
   HttpCode,
   HttpStatus,
+  Req,
 } from '@nestjs/common';
 import { ArticleService } from '../services/article.service';
 import { CreateArticleDto } from '../dto/create-article.dto';
@@ -49,8 +50,11 @@ export class ArticleController {
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     type: BaseApiErrorResponse,
   })
+  @Public()
   @Get()
-  findAll() {
+  findAll(@Req() req: any) {
+    console.log('请求ip', req.ip, req.ips);
+    console.log(req.headers);
     return this.articleService.findAll();
   }
 

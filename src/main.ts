@@ -9,9 +9,23 @@ import { TransformInterceptor } from './shared/interceptors/transform.intercepto
 import { generateDocument } from './doc';
 import { RemoveSensitiveInfoInterceptor } from './shared/interceptors/remove-sensitive-info.interceptor';
 import { AppLogger } from './shared/logger/logger.service';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import { add } from 'winston';
 const { APP_PORT } = process.env;
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  // 添加安全头
+  app.use(helmet());
+
+  // 请求频率限制
+  app.use(
+    rateLimit({
+      windowMs: 15 * 60 * 1000, // 15 minutes
+      max: 100, // limit each IP to 100 requests per windowMs
+    }),
+  );
 
   // 添加全局的管道
   app.useGlobalPipes(
@@ -57,5 +71,12 @@ async function bootstrap() {
 
   await app.listen(APP_PORT);
   console.log(`http://localhost:${APP_PORT}`);
+
+  // 获取服务端口号和 ID
+  // const server = app.getHttpServer();
+  // const address = server.address();
+
+  // // 打印服务信息
+  // console.log(`App started on port ${address.port}`);
 }
 bootstrap();
