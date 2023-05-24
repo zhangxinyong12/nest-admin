@@ -346,7 +346,7 @@ const Page: React.FC = () => {
           showSizeChanger: true,
           showQuickJumper: true,
         }}
-        rowKey="user_id"
+        rowKey="id"
         columns={columns}
         request={(params) => reqTableData(params, GetUserAccountApi)}
         search={{
