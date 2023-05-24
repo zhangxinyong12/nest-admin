@@ -1,6 +1,7 @@
 import {
   DeleteUserAccountApi,
   GetUserAccountApi,
+  GetUserInfoApi,
   PostUserAccountApi,
   PutUserAccountApi,
 } from '@/services';
@@ -44,23 +45,18 @@ const FormModale: React.FC<PropsTyep> = ({
   useEffect(() => {
     if (data?.name) {
       // 获取详情
-      GetUserAccountApi({
-        id: data.id,
-      }).then((res) => {
+      GetUserInfoApi(
+         data.id
+      ).then((res) => {
         setResData(res);
-        const customers = res.customers.map((el) => el.customer_id);
         form.setFields([
           {
-            name: 'customers',
-            value: customers,
+            name: 'name',
+            value: res.name,
           },
           {
-            name: 'fullname',
-            value: res.fullname,
-          },
-          {
-            name: 'username',
-            value: res.username,
+            name: 'phone',
+            value: res.phone,
           },
         ]);
       });
@@ -70,53 +66,31 @@ const FormModale: React.FC<PropsTyep> = ({
   const onFinish = async () => {
     form.validateFields().then((val) => {
       setConfirmLoading(true);
-      const customers: any[] = [];
-      val.customers.forEach((el) => {
-        const item = options.find((ele) => ele.value === el);
-        customers.push({
-          customer_id: item?.value,
-          customer_name: item?.label,
-        });
-      });
+      
       const params = {
-        ...val,
-        customers,
-        user_id: resData?.user_id,
-        username: resData?.user_id ? undefined : val.username,
+        name: val.name,
+        phone: val.phone ,
+        password: val.password,
       };
-      if (!data!.name) {
+      if (!data!.id) {
         PostUserAccountApi(params)
           .then((res) => {
             message.success('新增成功');
             setIsModalOpen(false);
             onOk();
           })
-          .catch((err) => {
-            form.setFields([
-              {
-                name: 'name',
-                errors: [err.message.name],
-              },
-            ]);
-          })
+          
           .finally(() => {
             setConfirmLoading(false);
           });
       } else {
-        PutUserAccountApi(params)
+        PutUserAccountApi(data!.id,params)
           .then((res) => {
             message.success('修改成功');
             setIsModalOpen(false);
             onOk();
           })
-          .catch((err) => {
-            form.setFields([
-              {
-                name: 'name',
-                errors: [err.message.name],
-              },
-            ]);
-          })
+          
           .finally(() => {
             setConfirmLoading(false);
           });
@@ -151,27 +125,9 @@ const FormModale: React.FC<PropsTyep> = ({
           wrapperCol={{ span: 16 }}
           autoComplete="off"
         >
+          
           <Form.Item
-            name="customers"
-            label="用户名称"
-            rules={[
-              {
-                required: true,
-                message: '用户名称不能为空',
-              },
-            ]}
-          >
-            <Select
-              showSearch
-              optionFilterProp="label"
-              placeholder="请选择用户名称（可多选）"
-              options={options}
-              allowClear
-              mode="multiple"
-            />
-          </Form.Item>
-          <Form.Item
-            name="fullname"
+            name="name"
             label="姓名"
             rules={[
               {
@@ -187,7 +143,7 @@ const FormModale: React.FC<PropsTyep> = ({
             <Input placeholder="请输入姓名" allowClear autoComplete="off" />
           </Form.Item>
           <Form.Item
-            name="username"
+            name="phone"
             label="账号"
             rules={[
               {
@@ -311,6 +267,18 @@ const Page: React.FC = () => {
     {
       dataIndex: 'phone',
       title: '手机号',
+    },
+    {
+      dataIndex: 'createdAt',
+      title: '创建时间',
+      hideInSearch: true,
+      valueType: 'dateTime',
+    },
+    {
+      dataIndex: 'updatedAt',
+      title: '修改时间',
+      hideInSearch: true,
+      valueType: 'dateTime',
     },
     {
       title: '操作',

@@ -31,10 +31,18 @@ type resPonse = {
 };
 
 export function reqTableData(_params, api): Promise<resPonse> {
-  const params = { ..._params };
+  console.log(_params)
+  const _ = { ..._params };
+  delete _.current;
+  delete _.pageSize;
+
+  const params:{
+    page?:number;
+    pageSize?:number;
+    params?:any;
+  } = { params:{..._} };
   params.page = _params.current || 1;
   params.pageSize = _params.pageSize || 20;
-  delete params.current;
   return api(params)
     .then((res) => {
       return Promise.resolve({

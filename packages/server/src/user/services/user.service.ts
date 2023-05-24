@@ -98,6 +98,7 @@ export class UserService {
     };
   }
 
+  // 查询单个用户
   async findOne(id: string) {
     console.log(id);
     const findData = await this.userRepository.findOneBy(id);
@@ -107,6 +108,7 @@ export class UserService {
     return findData;
   }
 
+  // 更新用户
   async update(id: string, user: UpdateUserDto) {
     await this.findOne(id);
     /// 如果更新密码
@@ -115,10 +117,12 @@ export class UserService {
       user.salt = salt;
       user.password = hashPassword;
     }
+    user.updatedAt = new Date(); // 手动设置更新日期
     await this.userRepository.update(id, user);
     return this.findOne(id);
   }
 
+  // 删除用户
   async remove(id: string) {
     await this.findOne(id);
     return this.userRepository.delete(id);

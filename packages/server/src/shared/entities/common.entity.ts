@@ -5,6 +5,7 @@ import {
   ObjectIdColumn,
   ObjectID,
   UpdateDateColumn,
+  BeforeUpdate,
 } from 'typeorm';
 
 @Entity()
@@ -19,6 +20,10 @@ export abstract class Common {
   @UpdateDateColumn()
   updatedAt: Date;
 
+  @BeforeUpdate()
+  updateDate() {
+    this.updatedAt = new Date();
+  }
   // 软删除
   @Column({ default: false, select: false })
   deleted: boolean;

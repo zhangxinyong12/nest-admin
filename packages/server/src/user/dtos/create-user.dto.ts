@@ -29,32 +29,25 @@ export class CreateUserDto {
   salt?: string;
 
   @ApiProperty({ example: '11111111@qq.com' })
-  @IsNotEmpty()
-  email: string;
+  email?: string;
 
   @ApiProperty({ example: 'cookieboty' })
-  @IsNotEmpty()
-  avatar: string;
+  avatar?: string;
 
   @ApiProperty({ example: 'frontend' })
-  @IsNotEmpty()
-  job: string;
+  job?: string;
 
   @ApiProperty({ example: '前端开发工程师' })
-  @IsNotEmpty()
-  jobName: string;
+  jobName?: string;
 
   @ApiProperty({ example: 'cookieboty' })
-  @IsNotEmpty()
-  organization: string;
+  organization?: string;
 
   @ApiProperty({ example: 'beijing' })
-  @IsNotEmpty()
-  location: string;
+  location?: string;
 
   @ApiProperty({ example: 'cookieboty' })
-  @IsNotEmpty()
-  personalWebsite: string;
+  personalWebsite?: string;
 
   @ApiProperty({ example: 'role id, admin：管理员权限，user；用户权限' })
   role?;

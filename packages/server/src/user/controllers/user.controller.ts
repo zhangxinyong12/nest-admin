@@ -13,6 +13,7 @@ import {
   UseInterceptors,
   UseGuards,
   InternalServerErrorException,
+  Put,
 } from '@nestjs/common';
 
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -65,11 +66,18 @@ export class UserController {
 
   @ApiTags('获取所有用户')
   @Get()
-  findAll(@Body() body: PaginationParamsDto) {
-    console.log('body分页', body);
+  findAll(
+    @Query('params') params: string, // 解析 "params" 参数，并将其作为字符串传递给方法的 params 参数
+    @Query('page') page: number, // 解析 "page" 参数，并将其解析成数字类型传递给方法的 page 参数
+    @Query('pageSize') pageSize: number, // 解析 "pageSize" 参数，并将其解析成数字类型传递给方法的 pageSize 参数
+  ) {
     // 使用环境变量
     // console.log('ENV:URL:', this.configService.get<string>('database.url'));
-    return this.userService.findAll(body);
+    return this.userService.findAll({
+      params: JSON.parse(params),
+      page,
+      pageSize,
+    });
   }
 
   @ApiTags('测试权限')
@@ -100,7 +108,7 @@ export class UserController {
   }
 
   @ApiTags('更新用户')
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     console.log(id);
     return this.userService.update(id, updateUserDto);

@@ -30,25 +30,35 @@ export async function UserchangePasswordApi(data) {
   });
 }
 
-// 用户
+// 用户 分页
 export async function GetUserAccountApi(params) {
   return request(apiList.UserAccount, {
     method: 'GET',
     params,
   });
 }
+// 详情
+export async function GetUserInfoApi(id) {
+  return request(apiList.UserAccount + `/${id}`, {
+    method: 'GET',
+  });
+}
+
+// 新增
 export async function PostUserAccountApi(data) {
   return request(apiList.UserAccount, {
     method: 'POST',
     data,
   });
 }
-export async function PutUserAccountApi(data) {
-  return request(apiList.UserAccount, {
+// 修改
+export async function PutUserAccountApi(id, data) {
+  return request(apiList.UserAccount + `/${id}`, {
     method: 'PUT',
     data,
   });
 }
+// 删除
 export async function DeleteUserAccountApi(id) {
   return request(apiList.UserAccount + `/${id}`, {
     method: 'DELETE',

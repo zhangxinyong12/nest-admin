@@ -14,13 +14,6 @@ export class User extends Common {
   @Column('text')
   name: string;
 
-  @Column('text')
-  avatar: string;
-
-  // @Unique('email', ['email'])
-  @Column({ length: 200 })
-  email: string;
-
   // 手机号
   @Column('text')
   phone: string;
@@ -28,42 +21,49 @@ export class User extends Common {
   @Column()
   password: string;
 
+  @Column('text')
+  avatar?: string;
+
+  // @Unique('email', ['email'])
+  @Column({ length: 200 })
+  email?: string;
+
   @Column()
   role?: ObjectID;
 
   @Column()
-  job: string;
+  job?: string;
 
   @Column()
-  jobName: string;
+  jobName?: string;
 
   @Column()
-  organization: string;
+  organization?: string;
 
   @Column()
   organizationName: string;
 
   @Column()
-  location: string;
+  location?: string;
 
   @Column()
-  locationName: string;
+  locationName?: string;
 
   @Column()
-  introduction: string;
+  introduction?: string;
 
   @Column()
-  personalWebsite: string;
+  personalWebsite?: string;
 
   @Column('boolean')
-  verified: boolean;
+  verified?: boolean;
 
   // 加密盐
   @Column({
     type: 'text',
     select: false,
   })
-  salt: string;
+  salt?: string;
 
   @Column()
   isAccountDisabled?: boolean;
