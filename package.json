@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "dev:server": "cd ./packages/server && npm run dev",
-    "dev:admin": "cd ./packages/acro-admin && npm run dev"
+    "dev:admin": "cd ./packages/admin-umijs && npm run dev"
   },
   "keywords": [],
   "author": "",

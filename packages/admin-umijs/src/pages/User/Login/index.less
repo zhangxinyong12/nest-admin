@@ -1,0 +1,31 @@
+@import (reference) '~antd/es/style/themes/index';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: auto;
+  background: @layout-body-background;
+
+  .box {
+    // width: 740px;
+    margin: 170px auto;
+    display: flex;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 15px 10px 41px 0 rgba(70, 118, 163, 0.31);
+
+    .right {
+      flex: 1;
+      padding-top: 53px;
+    }
+  }
+}
+
+:global {
+  .login_form_box {
+    .ant-pro-form-login-main {
+      margin-top: 42px;
+    }
+  }
+}

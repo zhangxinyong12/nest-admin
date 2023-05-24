@@ -12,6 +12,7 @@ import {
   UploadedFile,
   UseInterceptors,
   UseGuards,
+  InternalServerErrorException,
 } from '@nestjs/common';
 
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -107,7 +108,12 @@ export class UserController {
 
   @ApiTags('删除用户')
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: string, @Req() req: any) {
+    // 自己不能删除自己
+    if (id === req.user.id) {
+      throw new InternalServerErrorException('不能删除自己');
+    }
+
     return this.userService.remove(id);
   }
 

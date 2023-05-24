@@ -11,4 +11,4 @@ http://localhost:3000
 ```
 npm run dev:admin
 ```
-http://localhost:3006
+http://localhost:8686

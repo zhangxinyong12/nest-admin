@@ -78,6 +78,12 @@ export class AuthService {
     };
   }
 
+  // 退出登录
+  async logout(id: string) {
+    await this.redis.del(`login_user_${id}`);
+    return true;
+  }
+
   // 获取用户信息
   async info(id: string) {
     console.log('iddddddddd', id);

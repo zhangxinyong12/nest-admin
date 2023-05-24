@@ -1,0 +1,200 @@
+@import '~antd/es/style/variable.less';
+
+// 函数生成常用间距clss
+// ml1 margin-left:1px
+// ml20 margin-left:20px
+.for(@i) when(@i <=200) {
+  //@i
+  .for(@i + 1); //@i + 1 相当于"++i"
+
+  .ml@{i} {
+    margin-left: @i* (1px);
+  }
+
+  .mt@{i} {
+    margin-top: @i* (1px);
+  }
+
+  .mb@{i} {
+    margin-bottom: @i* (1px);
+  }
+
+  .mr@{i} {
+    margin-right: @i* (1px);
+  }
+
+  .pl@{i} {
+    padding-left: @i* (1px);
+  }
+
+  .pr@{i} {
+    padding-right: @i* (1px);
+  }
+
+  .pt@{i} {
+    padding-top: @i* (1px);
+  }
+
+  .pb@{i} {
+    padding-bottom: @i* (1px);
+  }
+
+  .f-@{i} {
+    font-size: @i* (1px);
+  }
+}
+
+.for(1);
+
+/* 设置滚动条的样式 */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+  // background: #F4F4F5;
+}
+
+/* 滚动槽 */
+::-webkit-scrollbar-track {
+  // -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 6px;
+}
+
+/* 滚动条滑块 */
+::-webkit-scrollbar-thumb {
+  border-radius: 6px;
+  background-color: #c7c5c5;
+}
+
+.red,
+.error {
+  color: var(--ant-error-color);
+}
+
+@green: #009a29;
+
+.green,
+.success {
+  color: var(--ant-success-color);
+}
+
+.ant-switch-checked {
+  background-color: @green !important;
+}
+
+html {
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+// 查询table form 《展开》文字不换行
+.ant-pro-table {
+  .ant-pro-card {
+    .ant-form {
+      .ant-pro-query-filter-row {
+        .ant-col.ant-col-8 {
+          .ant-space-item {
+            white-space: nowrap;
+          }
+        }
+      }
+    }
+  }
+}
+
+// 禁止点击
+.no-click {
+  color: red !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+}
+
+// icon添加hover颜色
+.anticon {
+  &:hover {
+    color: var(--ant-primary-color);
+  }
+}
+
+// 当搜索项只有一个的时候。不要搜索按钮
+.no_form_search_btn {
+  .ant-col.ant-col-8:last-child {
+    display: none;
+  }
+}
+
+// 表格 按钮
+.custom_btn {
+  color: rgb(255, 255, 255) !important;
+  border-radius: 6px !important;
+
+  &:hover {
+    border-color: #fff !important;
+  }
+}
+
+.table_btn {
+  border-radius: 6px !important;
+}
+
+.edit_btn {
+  background-color: rgb(86, 119, 252) !important;
+  .custom_btn();
+}
+
+.delete_btn {
+  background: rgb(251, 135, 7) !important;
+  .custom_btn();
+}
+
+.copy_btn {
+  background: rgb(17, 180, 34) !important;
+  .custom_btn();
+}
+
+// 表单 弹窗
+.form_modal {
+  .ant-modal-body {
+    overflow-y: auto;
+    max-height: 60vh;
+  }
+}
+
+.cus-switch-no-check:not(.ant-switch-disabled),
+.ant-switch {
+  background-color: #c58c5a;
+}
+
+.ant-space.ant-space-horizontal.ant-space-align-center.ant-pro-table-list-toolbar-setting-items {
+  display: none;
+}
+
+// 下拉框不限制宽度
+// .ant-select-dropdown {
+//   width: auto !important;
+//   min-width: auto !important;
+// }
+
+// // .ant-select-dropdown-placement-bottomLeft {
+// //   left: auto !important;
+// //   right: 1px !important;
+// //   transform: translateX(-50%) !important;
+// // }
+// 取消按钮选中和激活的边框颜色
+.ant-btn:active,
+.ant-btn:focus {
+  border-color: transparent !important;
+}
+
+.ant-tag {
+  background: #fff !important;
+}
+
+// antd modal 里面的spin 高度100% 垂直居中
+.ant-modal-body {
+  .ant-spin-nested-loading > div > .ant-spin {
+    height: 100%;
+    max-height: 100% !important;
+  }
+}

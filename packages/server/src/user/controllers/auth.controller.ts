@@ -56,6 +56,22 @@ export class AuthController {
     return this.authService.login(loginDTO);
   }
 
+  // 退出登录
+  @ApiOperation({ summary: '退出登录' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: SwaggerBaseApiResponse({}),
+    description: '退出登录成功',
+  })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    type: BaseApiErrorResponse,
+  })
+  @ApiBearerAuth()
+  @Post('logout')
+  async logout(@Req() req: any) {
+    return this.authService.logout(req.user.id);
+  }
   // 获取用户信息
   @ApiOperation({ summary: '获取用户信息' })
   @ApiResponse({
@@ -76,7 +92,7 @@ export class AuthController {
     console.log(data);
     // delete data.password;
     // delete data.salt;
-    return { data };
+    return data;
   }
 
   // 根据手机号生成验证码

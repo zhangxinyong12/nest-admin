@@ -142,10 +142,10 @@ export class ArticleService implements OnModuleInit {
   // | | hour
   // | minute
   // second (optional)
-  @Cron('*/10 * * * * *')
-  // @Cron('0 0 * * *') // 每天凌晨 0 点执行一次
+  // @Cron('*/10 * * * * *')
+  @Cron('0 0 * * *') // 每天凌晨 0 点执行一次
   async handleCron() {
-    // console.log('每天凌晨 0 点执行一次');
-    console.log('定时任务 每10秒执行一次');
+    console.log('每天凌晨 0 点执行一次');
+    // console.log('定时任务 每10秒执行一次');
   }
 }
