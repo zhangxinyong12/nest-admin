@@ -7,6 +7,7 @@ import { SharedModule } from 'src/shared/shared.module';
 import { CMSModule } from './cms/cms.module';
 import { NewsModule } from './news/news.module';
 import { TangshiModule } from './tangshi/tangshi.module';
+import { BookUserModule } from './books/user/user.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { TangshiModule } from './tangshi/tangshi.module';
     CMSModule,
     NewsModule,
     TangshiModule,
+    BookUserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
