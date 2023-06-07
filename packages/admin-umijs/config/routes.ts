@@ -35,6 +35,11 @@ const defaultRouter = [
     name: '用户列表',
     component: './User/UserList',
   },
+  {
+    path: '/tangshi',
+    name: '唐诗三百首',
+    component: './TangShi/index',
+  },
   // {
   //   path: '*',
   //   layout: false,

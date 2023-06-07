@@ -71,3 +71,11 @@ export async function AuthInfo() {
     method: 'GET',
   });
 }
+
+// 唐诗三百首
+export async function Tangshi(params) {
+  return request(apiList.Tangshi, {
+    method: 'GET',
+    params,
+  });
+}

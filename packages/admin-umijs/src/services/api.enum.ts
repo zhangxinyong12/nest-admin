@@ -7,6 +7,7 @@ enum apiList {
   UserAccount = '/user', // 用户管理 CRUD
 
   AuthInfo = 'auth/info', // 获取用户信息
+  Tangshi = 'tangshi',
 }
 
 export default apiList;
