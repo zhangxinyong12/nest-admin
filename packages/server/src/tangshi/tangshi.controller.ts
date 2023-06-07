@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  HttpCode,
 } from '@nestjs/common';
 import { TangshiService } from './tangshi.service';
 import { CreateTangshiDto } from './dto/create-tangshi.dto';
@@ -16,12 +17,14 @@ import { PaginationParamsDto } from 'src/shared/dtos/pagination-params.dto';
 export class TangshiController {
   constructor(private readonly tangshiService: TangshiService) {}
 
-  @Post()
-  create(@Body() createTangshiDto: CreateTangshiDto) {
-    return this.tangshiService.create(createTangshiDto);
-  }
+  // @Post()
+  // create(@Body() createTangshiDto: CreateTangshiDto) {
+  //   return this.tangshiService.create(createTangshiDto);
+  // }
 
-  @Get()
+  @Post()
+  // @Get()
+  @HttpCode(200)
   findAll(@Body() body: PaginationParamsDto) {
     return this.tangshiService.findAll(body);
   }
