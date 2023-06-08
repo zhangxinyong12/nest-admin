@@ -74,7 +74,19 @@ export class TangshiService {
 
     // 返回结果
     return {
-      items: data,
+      items: data.map((e) => {
+        const { _id, title, auth, content, type, createdAt } = e;
+        return {
+          _id,
+
+          title,
+          auth,
+          content,
+          type,
+          createdAt,
+          time: new Date(),
+        } as any;
+      }),
       total,
       page,
       pageSize,

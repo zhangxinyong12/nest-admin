@@ -1,12 +1,39 @@
 import { getTestList } from "@/api"
+import { AxiosResponse } from "axios"
 import Link from "next/link"
 
-async function Home({ items }) {
+type Items = {
+  _id: string
+  title: string
+  auth: string
+  content: string[]
+}
+const getList = async () => {
+  const { data }: any = await fetch("http://localhost:3000/tangshi", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      page: 1,
+      pageSize: 2,
+    }),
+    next: {
+      revalidate: 6, // 请求结果缓存*s
+    },
+    cache: "no-cache", // 不缓存
+  }).then((res) => res.json())
+  console.log("data", data)
+  return data.items
+}
+
+async function Home() {
   // 直接在这里发送请求就可以了。。。。
   // const { items }: any = await getTestList({
   //   page: 1,
   //   pageSize: 2,
   // })
+  const items = await getList()
   console.log("items", items)
   return (
     <div>
@@ -31,39 +58,12 @@ async function Home({ items }) {
                 <p key={el}>{el}</p>
               ))}
             </div>
+            <div>请求时间：{item.time}</div>
           </div>
         )
       })}
     </div>
   )
 }
-// // 这个好像执行顺序在之后
-// export async function generateStaticParams() {
-//   // 调用外部 API 获取博文列表
-//   const data: any = await getTestList({
-//     page: 1,
-//     pageSize: 2,
-//   })
-//   // 通过返回 { props: { posts } } 对象，Blog 组件
-//   // 在构建时将接收到 `posts` 参数
-//   console.log("请求回来的数据", data.items)
 
-//   return data.items
-// }
-
-// TODO 这个好像不对
-export async function getStaticProps() {
-  console.log("执行数据据请求")
-  // 调用外部 API 获取博文列表
-  const data: any = await getTestList()
-  // 通过返回 { props: { posts } } 对象，Blog 组件
-  // 在构建时将接收到 `posts` 参数
-  console.log("请求回来的数据", data.items)
-  return {
-    props: {
-      items: data.items,
-    },
-    revalidate: 600, // 10分钟更新一次
-  }
-}
 export default Home
