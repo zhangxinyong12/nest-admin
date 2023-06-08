@@ -50,11 +50,6 @@ export class AppLogger {
       body: req.body,
       ip: req.ip,
     };
-    this.logger.info({
-      message,
-      contextName: this.context,
-      ctx,
-    });
   }
 
   // 请求错误日志
@@ -67,12 +62,6 @@ export class AppLogger {
       body: req.body,
       ip: req.ip,
     };
-    this.logger.error({
-      message,
-      contextName: this.context,
-      ctx,
-      stack: error.stack,
-    });
   }
 
   // 错误日志

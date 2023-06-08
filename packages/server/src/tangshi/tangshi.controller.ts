@@ -12,6 +12,7 @@ import { TangshiService } from './tangshi.service';
 import { CreateTangshiDto } from './dto/create-tangshi.dto';
 import { UpdateTangshiDto } from './dto/update-tangshi.dto';
 import { PaginationParamsDto } from 'src/shared/dtos/pagination-params.dto';
+import { Public } from 'src/shared/auth/decorator/auth.decorator';
 
 @Controller('tangshi')
 export class TangshiController {
@@ -25,7 +26,9 @@ export class TangshiController {
   @Post()
   // @Get()
   @HttpCode(200)
+  @Public()
   findAll(@Body() body: PaginationParamsDto) {
+    console.log('body', body, new Date());
     return this.tangshiService.findAll(body);
   }
 

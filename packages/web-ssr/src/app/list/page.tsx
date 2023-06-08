@@ -4,7 +4,7 @@ import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useEffect } from "react"
 
-export default function List({ navLinks }) {
+export default function List() {
   const pathname = usePathname()
   const router = useRouter()
 
