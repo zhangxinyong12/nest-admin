@@ -1,12 +1,13 @@
 import { getTestList } from "@/api"
 import Link from "next/link"
 
-async function Home() {
+async function Home({ items }) {
   // 直接在这里发送请求就可以了。。。。
-  const { items }: any = await getTestList({
-    page: 1,
-    pageSize: 2,
-  })
+  // const { items }: any = await getTestList({
+  //   page: 1,
+  //   pageSize: 2,
+  // })
+  console.log("items", items)
   return (
     <div>
       <button className="btn btn-primary">列表项3</button>
@@ -60,7 +61,7 @@ export async function getStaticProps() {
   console.log("请求回来的数据", data.items)
   return {
     props: {
-      list: data.items || [],
+      items: data.items,
     },
     revalidate: 600, // 10分钟更新一次
   }
