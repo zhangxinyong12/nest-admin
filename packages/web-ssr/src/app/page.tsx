@@ -19,22 +19,17 @@ const getList = async () => {
       pageSize: 2,
     }),
     next: {
-      revalidate: 6, // 请求结果缓存*s
+      revalidate: 1000, // 请求结果缓存*s
+      tags: ["refresh"], // 缓存标签
     },
-    cache: "no-cache", // 不缓存
+    // cache: "no-cache", // 不缓存
   }).then((res) => res.json())
-  console.log("data", data)
   return data.items
 }
 
 async function Home() {
   // 直接在这里发送请求就可以了。。。。
-  // const { items }: any = await getTestList({
-  //   page: 1,
-  //   pageSize: 2,
-  // })
   const items = await getList()
-  console.log("items", items)
   return (
     <div>
       <button className="btn btn-primary">列表项3</button>
