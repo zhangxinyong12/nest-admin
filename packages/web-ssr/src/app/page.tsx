@@ -19,7 +19,7 @@ const getList = async () => {
       pageSize: 2,
     }),
     next: {
-      revalidate: 1000, // 请求结果缓存*s
+      // revalidate: 1000, // 请求结果缓存*s
       tags: ["refresh"], // 缓存标签
     },
     // cache: "no-cache", // 不缓存
