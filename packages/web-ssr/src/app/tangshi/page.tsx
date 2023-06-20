@@ -1,8 +1,8 @@
-import { getTestList } from "@/api"
+import { getTangshiList } from "@/api"
 import Link from "next/link"
 
 export default async function page() {
-  const { items }: any = await getTestList({})
+  const { items }: any = await getTangshiList({})
 
   return (
     <div className="text-center mt-2">

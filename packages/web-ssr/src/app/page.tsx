@@ -1,4 +1,4 @@
-import { getTestList } from "@/api"
+import { getTangshiList } from "@/api"
 import { AxiosResponse } from "axios"
 import Link from "next/link"
 
@@ -11,7 +11,10 @@ type Items = {
 
 async function Home() {
   // 直接在这里发送请求就可以了。。。。
-  const { items }: any = await getTestList({})
+  const { items }: any = await getTangshiList({
+    page: 1,
+    pageSize: 2,
+  })
   console.log("items", items)
   return (
     <div className="flex flex-wrap p-2 mt-4">
