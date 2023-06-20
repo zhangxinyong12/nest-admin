@@ -8,32 +8,13 @@ type Items = {
   auth: string
   content: string[]
 }
-const getList = async () => {
-  const { data }: any = await fetch("http://localhost:3000/tangshi", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      page: 1,
-      pageSize: 2,
-    }),
-    next: {
-      revalidate: 6, // 请求结果缓存*s
-    },
-    cache: "no-cache", // 不缓存
-  }).then((res) => res.json())
-  console.log("data", data)
-  return data.items
-}
 
 async function Home() {
   // 直接在这里发送请求就可以了。。。。
-  // const { items }: any = await getTestList({
-  //   page: 1,
-  //   pageSize: 2,
-  // })
-  const items = await getList()
+  const { items }: any = await getTestList({
+    page: 1,
+    pageSize: 2,
+  })
   console.log("items", items)
   return (
     <div>
