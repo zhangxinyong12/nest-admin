@@ -33,6 +33,7 @@ export class TangshiController {
   }
 
   @Get(':id')
+  @Public()
   findOne(@Param('id') id: string) {
     return this.tangshiService.findOne(id);
   }

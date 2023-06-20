@@ -11,35 +11,20 @@ type Items = {
 
 async function Home() {
   // 直接在这里发送请求就可以了。。。。
-  const { items }: any = await getTestList({
-    page: 1,
-    pageSize: 2,
-  })
+  const { items }: any = await getTestList({})
   console.log("items", items)
   return (
-    <div>
-      <button className="btn btn-primary">列表项3</button>
-      <h2>next 666</h2>
-      <button className="btn btn-link">
-        <Link href="/dashboard">Dashboard</Link>
-      </button>
+    <div className="flex flex-wrap p-2 mt-4">
       {items.map((item) => {
         return (
           <div
-            key={item._id}
-            style={{
-              textAlign: "center",
-              marginBottom: "20px",
-            }}
+            key={item.id}
+            className="w-1/6 border text-center hover:bg-gray-200"
           >
-            <h1>{item.title}</h1>
-            <h3>{item.auth}</h3>
-            <div>
-              {item.content.map((el) => (
-                <p key={el}>{el}</p>
-              ))}
-            </div>
-            <div>请求时间：{item.time}</div>
+            <Link href={`/tangshi/${item.id}`} className="block p-2">
+              <h1 className="text-[16px] font-bold">{item.title}</h1>
+              <h3 className="text-[14px] mt-2">{item.auth}</h3>
+            </Link>
           </div>
         )
       })}
