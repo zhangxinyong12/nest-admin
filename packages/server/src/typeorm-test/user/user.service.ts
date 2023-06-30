@@ -4,12 +4,15 @@ import { ReqPage } from '../type';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.mysql.entity';
+import { IdCard } from './entities/idCard.mysql.entity';
 
 @Injectable()
 export class UserService {
   constructor(
     @Inject('TYPEORM_TEST_USER_REPOSITORY')
     private userRepository: Repository<User>,
+    @Inject('TYPEORM_TEST_IDCARD_REPOSITORY')
+    private idCardRepository: Repository<IdCard>,
   ) {}
 
   create(createUserDto: CreateUserDto) {
@@ -52,6 +55,7 @@ export class UserService {
   findOne(id: number) {
     return this.userRepository.findOne({
       where: { id },
+      relations: ['idCard'], // 这里的 idCard 是 user.entity.ts 中的 idCard 字段 @OneToOne(() => IdCard) idCard: IdCard; 也就是关联的字段
     });
   }
 
@@ -62,5 +66,41 @@ export class UserService {
 
   remove(id: number) {
     return this.userRepository.delete(id);
+  }
+
+  async text1to1() {
+    const user = new User();
+    user.firstName = '测试firstName1' + Math.random();
+    user.lastName = '测试lastName1';
+    user.age = 18;
+
+    const idCard = new IdCard();
+    idCard.cardName = '1234567891' + Math.random();
+    idCard.user = user;
+
+    await this.userRepository.save(user);
+    await this.idCardRepository.save(idCard);
+    return {
+      user,
+      idCard,
+    };
+  }
+
+  async findIdCard(id: number) {
+    const idCard = await this.idCardRepository.findOne({
+      where: { id },
+      relations: ['user'], // 这里的 user 是 idCard.entity.ts 中的 user 字段 @OneToOne(() => User) user: User; 也就是关联的字段
+    });
+    return idCard;
+  }
+
+  async updateIdCard(
+    id: number,
+    boday: {
+      cardName: string;
+    },
+  ) {
+    await this.idCardRepository.update(id, boday);
+    return this.findIdCard(id);
   }
 }

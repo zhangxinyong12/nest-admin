@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { IdCard } from './idCard.mysql.entity';
 
 @Entity({ name: 'user' })
 export class User {
@@ -27,4 +28,7 @@ export class User {
     type: 'int',
   })
   age: number;
+
+  @OneToOne(() => IdCard, (idCard) => idCard.user)
+  idCard: IdCard;
 }

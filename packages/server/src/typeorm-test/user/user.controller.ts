@@ -48,4 +48,21 @@ export class UserController {
   remove(@Param('id') id: string) {
     return this.userService.remove(+id);
   }
+
+  // 测试 1 对 1的关系 新增
+  @Post('text1to1')
+  text1to1() {
+    return this.userService.text1to1();
+  }
+
+  @Get('findIdCard/:id')
+  findIdCard(@Param('id') id: string) {
+    return this.userService.findIdCard(+id);
+  }
+
+  // idCad  根据id修改
+  @Patch('updateIdCard/:id')
+  updateIdCard(@Param('id') id: string, @Body() body: any) {
+    return this.userService.updateIdCard(+id, body);
+  }
 }
