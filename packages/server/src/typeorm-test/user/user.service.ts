@@ -1,7 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { create } from 'svg-captcha';
 import { Repository } from 'typeorm';
-import { remove } from 'winston';
 import { ReqPage } from '../type';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -23,12 +21,17 @@ export class UserService {
     const { page = 1, pageSize = 10, params } = query;
     const { firstName, lastName, age } = params;
     const where = {};
-    // 这里的逻辑是，如果有传入参数，就加入到 where 条件中
-    // 模糊查询
+    // 这里的逻辑是，如果有传入参数，就加入到 where 条件中 模糊查询
     if (firstName) {
+      // where['firstName'] = {
+      //   $like: `%${firstName}%`,
+      // };
       where['firstName'] = firstName;
     }
     if (lastName) {
+      // where['lastName'] = {
+      //   $like: `%${lastName}%`,
+      // };
       where['lastName'] = lastName;
     }
     if (age) {
