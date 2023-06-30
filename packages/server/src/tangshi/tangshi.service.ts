@@ -77,7 +77,7 @@ export class TangshiService {
       items: data.map((e) => {
         const { _id, title, auth, content, type, createdAt } = e;
         return {
-          _id,
+          id: _id,
 
           title,
           auth,

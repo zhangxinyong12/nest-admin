@@ -1,4 +1,5 @@
 // 封装 HTTP 请求函数
+const BaseUrl = "http://localhost:3000/"
 class HTTP {
   get(url: string, data?: any, next?: any, cache?: RequestCache) {
     let params = ""
@@ -9,7 +10,7 @@ class HTTP {
       params = params.slice(0, -1)
       url = `${url}?${params}`
     }
-    return fetch(url, {
+    return fetch(BaseUrl + url, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -19,7 +20,7 @@ class HTTP {
     }).then((res) => res.json())
   }
   post(url: string, data?: any, next?: any, cache?: RequestCache) {
-    return fetch(url, {
+    return fetch(BaseUrl + url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
