@@ -8,6 +8,7 @@ import { CMSModule } from './cms/cms.module';
 import { NewsModule } from './news/news.module';
 import { TangshiModule } from './tangshi/tangshi.module';
 import { BookUserModule } from './books/user/user.module';
+import { TypeormTestModule } from './typeorm-test/typeorm-test.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { BookUserModule } from './books/user/user.module';
     NewsModule,
     TangshiModule,
     BookUserModule,
+    TypeormTestModule,
   ],
   controllers: [AppController],
   providers: [AppService],
