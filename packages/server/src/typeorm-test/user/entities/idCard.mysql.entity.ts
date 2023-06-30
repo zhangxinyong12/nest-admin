@@ -22,6 +22,7 @@ export class IdCard {
   cardName: string;
 
   @JoinColumn()
+  // 只能设置一级删除。否则会造成循环删除
   @OneToOne(() => User, {
     onDelete: 'CASCADE', // 慎重 删除用户的时候，一并删除身份证 一对一关系 一般是主表删除，从表也删除 .
     onUpdate: 'CASCADE', // 慎重 更新用户的时候，一并更新身份证 一对一关系 一般是主表更新，从表也更新 .

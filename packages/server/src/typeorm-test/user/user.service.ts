@@ -103,4 +103,8 @@ export class UserService {
     await this.idCardRepository.update(id, boday);
     return this.findIdCard(id);
   }
+
+  async deleteIdCard(id: number) {
+    return this.idCardRepository.delete(id);
+  }
 }

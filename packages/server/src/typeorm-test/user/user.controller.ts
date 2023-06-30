@@ -65,4 +65,10 @@ export class UserController {
   updateIdCard(@Param('id') id: string, @Body() body: any) {
     return this.userService.updateIdCard(+id, body);
   }
+
+  // idCad  根据id删除
+  @Delete('deleteIdCard/:id')
+  deleteIdCard(@Param('id') id: string) {
+    return this.userService.deleteIdCard(+id);
+  }
 }
