@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { ReqPage } from '../type';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -23,16 +23,10 @@ export class UserService {
     const where = {};
     // 这里的逻辑是，如果有传入参数，就加入到 where 条件中 模糊查询
     if (firstName) {
-      // where['firstName'] = {
-      //   $like: `%${firstName}%`,
-      // };
-      where['firstName'] = firstName;
+      where['firstName'] = Like(`%${firstName}%`);
     }
     if (lastName) {
-      // where['lastName'] = {
-      //   $like: `%${lastName}%`,
-      // };
-      where['lastName'] = lastName;
+      where['lastName'] = Like(`%${lastName}%`);
     }
     if (age) {
       where['age'] = age;
@@ -43,7 +37,7 @@ export class UserService {
       take: pageSize,
       where,
       order: {
-        id: 'DESC',
+        id: 'ASC',
       },
     });
 
