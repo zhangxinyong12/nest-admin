@@ -1,10 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Like, Repository } from 'typeorm';
+import { In, Like, Repository } from 'typeorm';
 import { ReqPage } from '../type';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.mysql.entity';
 import { IdCard } from './entities/idCard.mysql.entity';
+import { Department } from './entities/department.mysql.entity';
+import { Employee } from './entities/employee.mysql.entity';
 
 @Injectable()
 export class UserService {
@@ -13,6 +15,10 @@ export class UserService {
     private userRepository: Repository<User>,
     @Inject('TYPEORM_TEST_IDCARD_REPOSITORY')
     private idCardRepository: Repository<IdCard>,
+    @Inject('TYPEORM_TEST_DEPARTMENT_REPOSITORY')
+    private departmentRepository: Repository<Department>,
+    @Inject('TYPEORM_TEST_EMPLOYEE_REPOSITORY')
+    private employeeRepository: Repository<Employee>,
   ) {}
 
   create(createUserDto: CreateUserDto) {
@@ -106,5 +112,59 @@ export class UserService {
 
   async deleteIdCard(id: number) {
     return this.idCardRepository.delete(id);
+  }
+
+  // 测试 1 对 多的关系 新增
+  async text1toMany() {
+    // const d1 = new Department();
+    // d1.name = '测试部门1_' + Math.random();
+    // const e1 = new Employee();
+    // e1.name = '测试员工1_' + Math.random();
+    // e1.department = d1;
+    // const e2 = new Employee();
+    // e2.name = '测试员工2_' + Math.random();
+    // e2.department = d1;
+    // const e3 = new Employee();
+    // e3.name = '测试员工3_' + Math.random();
+    // e3.department = d1;
+    // await this.departmentRepository.save(d1); // 如果是设置了 cascade，那就只需要保存 empolyee 就好了
+    // await this.employeeRepository.save([e1, e2, e3]);
+
+    const e1 = new Employee();
+    e1.name = '测试员工_' + Math.random();
+    const e2 = new Employee();
+    e2.name = '测试员工_' + Math.random();
+    const e3 = new Employee();
+    e3.name = '测试员工_' + Math.random();
+    const d1 = new Department();
+    d1.name = '测试部门_' + Math.random();
+    d1.employees = [e1, e2, e3];
+    await this.departmentRepository.save(d1);
+    return {
+      d1,
+    };
+  }
+
+  // 测试 1 对 多的关系 查询
+  async findDepartment(id: number) {
+    const department = await this.departmentRepository.findOne({
+      where: { id },
+      relations: ['employees'], // 这里的 employees 是 department.entity.ts 中的 employees 字段 @OneToMany(() => Employee, (employee) => employee.department)
+    });
+    return department;
+  }
+
+  // 测试 1 对 多的关系 查询 一个部门下的所有员工
+  async findEmployee(id: number) {
+    const employees = await this.employeeRepository.find({
+      where: { id },
+      relations: ['department'], // 这里的 department 是 employee.entity.ts 中的 department 字段 @ManyToOne(() => Department, (department) => department.employees)
+    });
+    return employees;
+  }
+
+  // 测试 1 对 多的关系 删除部门
+  async deleteDepartment(id: number) {
+    return this.departmentRepository.delete(id);
   }
 }

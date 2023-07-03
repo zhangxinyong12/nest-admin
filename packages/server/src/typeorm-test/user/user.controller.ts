@@ -71,4 +71,28 @@ export class UserController {
   deleteIdCard(@Param('id') id: string) {
     return this.userService.deleteIdCard(+id);
   }
+
+  // 测试 1 对 多的关系 新增
+  @Post('text1toMany')
+  text1toMany() {
+    return this.userService.text1toMany();
+  }
+
+  // 测试 1 对 多的关系 查询 一个用户下的所有部门
+  @Get('findDepartment/:id')
+  findDepartment(@Param('id') id: string) {
+    return this.userService.findDepartment(+id);
+  }
+
+  // 测试 1 对 多的关系 查询 一个部门下的所有员工
+  @Get('findEmployee/:id')
+  findEmployee(@Param('id') id: string) {
+    return this.userService.findEmployee(+id);
+  }
+
+  // 测试 1 对 多的关系 删除部门
+  @Delete('deleteDepartment/:id')
+  deleteDepartment(@Param('id') id: string) {
+    return this.userService.deleteDepartment(+id);
+  }
 }

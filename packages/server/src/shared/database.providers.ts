@@ -41,6 +41,12 @@ export const DatabaseProviders = [
         entities: [path.join(__dirname, `../../**/*.mysql.entity{.ts,.js}`)],
         logging: configService.get<boolean>('database.mysql.logging'),
         synchronize: configService.get<boolean>('database.mysql.synchronize'),
+        // 数据库迁移使用
+        // migrationsTableName: 'custom_migration_table', // - 仅当需要迁移表名称与migrations不同时才指定此选项。
+        migrations: ['migration/*.js'],
+        cli: {
+          migrationsDir: 'migration',
+        },
       };
 
       const ds = new DataSource(config);
