@@ -39,7 +39,7 @@ export class BaseExceptionsFilter implements ExceptionFilter {
       request: request.params,
       response: new ServiceUnavailableException().getResponse(),
     });
-    console.log(new ServiceUnavailableException());
+    console.log('服务器 错误', new ServiceUnavailableException());
 
     // 非 HTTP 标准异常的处理。
     return response.status(HttpStatus.SERVICE_UNAVAILABLE).send({

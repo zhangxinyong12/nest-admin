@@ -7,6 +7,8 @@ import { User } from './entities/user.mysql.entity';
 import { IdCard } from './entities/idCard.mysql.entity';
 import { Department } from './entities/department.mysql.entity';
 import { Employee } from './entities/employee.mysql.entity';
+import { Tag } from './entities/tag.mysql.entity';
+import { Article } from './entities/article..mysql.entity';
 
 @Injectable()
 export class UserService {
@@ -19,6 +21,10 @@ export class UserService {
     private departmentRepository: Repository<Department>,
     @Inject('TYPEORM_TEST_EMPLOYEE_REPOSITORY')
     private employeeRepository: Repository<Employee>,
+    @Inject('TYPEORM_TEST_TAG_REPOSITORY')
+    private tagRepository: Repository<Tag>,
+    @Inject('TYPEORM_TEST_ARTICLE_REPOSITORY')
+    private articleRepository: Repository<Article>,
   ) {}
 
   create(createUserDto: CreateUserDto) {
@@ -166,5 +172,71 @@ export class UserService {
   // 测试 1 对 多的关系 删除部门
   async deleteDepartment(id: number) {
     return this.departmentRepository.delete(id);
+  }
+
+  // 1-100 的随机整数
+  random() {
+    return Math.floor(Math.random() * 100) + 1;
+  }
+
+  // 测试多对多的关系 新增
+  async textManytoMany() {
+    const t1 = new Tag();
+    t1.name = '测试标签1_' + this.random();
+
+    const t2 = new Tag();
+    t2.name = '测试标签2_' + this.random();
+    const t3 = new Tag();
+    t3.name = '测试标签3_' + this.random();
+    const a1 = new Article();
+    a1.title = '测试文章1_' + this.random();
+    a1.content = '测试文章1_' + this.random();
+    a1.tags = [t1, t2, t3];
+    const a2 = new Article();
+    a2.title = '测试文章2_' + this.random();
+    a2.content = '测试文章2_' + this.random();
+    a2.tags = [t1, t2, t3];
+    const a3 = new Article();
+    a3.title = '测试文章3_' + this.random();
+    a3.content = '测试文章3_' + this.random();
+    a3.tags = [t1, t2, t3];
+    await this.tagRepository.save([t1, t2, t3]);
+    await this.articleRepository.save([a1, a2, a3]);
+    return {
+      t1,
+      t2,
+      t3,
+      a1,
+      a2,
+      a3,
+    };
+  }
+
+  // 测试多对多的关系 查询文章
+  async findArticle(id: number) {
+    const article = await this.articleRepository.findOne({
+      where: { id },
+      relations: ['tags'], // 这里的 tags 是 article.entity.ts 中的 tags 字段 @ManyToMany(() => Tag)
+    });
+    return article;
+  }
+
+  // 测试多对多的关系 查询标签
+  async findTag(id: number) {
+    const tag = await this.tagRepository.findOne({
+      where: { id },
+      relations: ['articles'], // 这里的 articles 是 tag.entity.ts 中的 articles 字段 @ManyToMany(() => Article)
+    });
+    return tag;
+  }
+
+  // 测试多对多的关系 删除文章
+  async deleteArticle(id: number) {
+    return this.articleRepository.delete(id);
+  }
+
+  // 测试多对多的关系 删除标签
+  async deleteTag(id: number) {
+    return this.tagRepository.delete(id);
   }
 }

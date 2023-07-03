@@ -95,4 +95,34 @@ export class UserController {
   deleteDepartment(@Param('id') id: string) {
     return this.userService.deleteDepartment(+id);
   }
+
+  // 测试多对多的关系 新增
+  @Post('textManytoMany')
+  textManytoMany() {
+    return this.userService.textManytoMany();
+  }
+
+  // 测试多对多查询文章
+  @Get('findArticle/:id')
+  findArticle(@Param('id') id: string) {
+    return this.userService.findArticle(+id);
+  }
+
+  // 测试多对多查询标签
+  @Get('findTag/:id')
+  findTag(@Param('id') id: string) {
+    return this.userService.findTag(+id);
+  }
+
+  // 测试多对多删除文章
+  @Delete('deleteArticle/:id')
+  deleteArticle(@Param('id') id: string) {
+    return this.userService.deleteArticle(+id);
+  }
+
+  // 测试多对多删除标签
+  @Delete('deleteTag/:id')
+  deleteTag(@Param('id') id: string) {
+    return this.userService.deleteTag(+id);
+  }
 }
