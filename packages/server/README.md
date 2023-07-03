@@ -14,33 +14,38 @@ mongodb数据库不使用typeorm了。使用[mongoose](https://docs.mongoing.com
 ## mongodb id查询无效
 项目已经锁死mongodb 和typeorm版本号。切勿升级，会有莫名其妙的错误。              
 ## TODO
-- typeorm中使用mongodb，Like查询不到数据,需要使用正则
+- typeorm中使用mongodb，Like
 ```
- // 模糊查询 分页接口
-  async findAll({ page, pageSize, params }: PaginationParamsDto) {
-    const { name, phone, email } = params;
+  // 分页接口
+  async findAll(query?: ReqPage) {
+    const { page = 1, pageSize = 10, params } = query;
+    const { firstName, lastName, age } = params;
+    const where = {};
+    // 这里的逻辑是，如果有传入参数，就加入到 where 条件中 模糊查询
+    if (firstName) {
+      where['firstName'] = Like(`%${firstName}%`);
+    }
+    if (lastName) {
+      where['lastName'] = Like(`%${lastName}%`);
+    }
+    if (age) {
+      where['age'] = age;
+    }
 
-    const query: MongoFindManyOptions<User> = {
-      order: {
-        updatedAt: 'DESC',
-      },
+    const [items, total] = await this.userRepository.findAndCount({
       skip: (page - 1) * pageSize,
-      take: pageSize * 1,
-      cache: true,
-      where: {
-        // TODO 模糊查询无效,Like不行？。需要使用正则表达式
-        ...(name ? { name: new RegExp(`${name}`) } : {}),
-        ...(phone ? { phone: Like(`%${phone}%`) } : {}),
-        ...(email ? { email: Like(`%${email}%`) } : {}),
+      take: pageSize,
+      where,
+      order: {
+        id: 'ASC',
       },
-    };
+    });
 
-    console.log('query', query);
-    const [data, count] = await this.userRepository.findAndCount(query);
     return {
-      code: 200,
-      data,
-      count,
+      items,
+      total,
+      page,
+      pageSize,
     };
   }
 ```
